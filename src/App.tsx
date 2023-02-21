@@ -1,6 +1,7 @@
 import {
   BrowserRouter as Router, Route, Routes
 } from "react-router-dom";
+import Modal from "./components/Modal";
 
 import Nav from "./components/Nav";
 import About from "./pages/About";
@@ -15,6 +16,9 @@ function App() {
     <div className="h-screen bg-white dark:bg-black">
       <Router>
         <Nav />
+        <div className="relative top-20">
+          <Modal />
+        </div>
         <div className="relative top-20 z-0 p-2">
           <Routes>
             <Route path="/" element={<Home/>}></Route>

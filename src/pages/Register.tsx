@@ -1,8 +1,11 @@
 import bcrypt from 'bcryptjs';
 import { useState } from "react";
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { insertIntoFirebase } from '../functions/firebase.create';
 import { searchIntoFirebase } from '../functions/firebase.search';
 import { UserInterface } from '../interfaces/user';
+import { setMessageForModal, setShowModal } from '../redux/features/modalMessage';
 
 const Register = () => {
 
@@ -17,29 +20,41 @@ const Register = () => {
   const [emailError, setEmailError] = useState<string>("")
   const [passwordError, setPasswordError] = useState<string>("")
   const [re_passwordError, setRe_passwordError] = useState<string>("")
+  const [anyOtherError, setAnyOtherError] = useState<boolean>(false)
   const [dataError, setDataError] = useState<string>("")
 
   const collectionName = "interested-users"
+
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
 
   const isValidated = async () => {
 
     if (typedName) {
       setNameError("")
+      setAnyOtherError(false)
       if (typedUsername) {
         setUsernameError("")
+        setAnyOtherError(false)
         if (typedEmail) {
           setEmailError("")
+          setAnyOtherError(false)
           if ((/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w+)+$/.test(typedEmail))) {
             setEmailError("")
+            setAnyOtherError(false)
             if (typedPassword) {
               setPasswordError("")
+              setAnyOtherError(false)
               if (typedPassword.trim().length >= 8) {
                 setPasswordError("")
+                setAnyOtherError(false)
                 if (typedRePassword === typedPassword) {
 
                   // datas of the form are valid by form validation
                   setRe_passwordError("")
                   setDataError("")
+                  setAnyOtherError(false)
 
                   // now duplicacy check
                   const data: UserInterface = {
@@ -51,31 +66,40 @@ const Register = () => {
                   const interestedUsers = await searchIntoFirebase(collectionName, data, ['email', 'username']);
                   if (!interestedUsers[0]) {
                     setDataError("")
+                    setAnyOtherError(false)
                     return true
                   } else {
+                    setAnyOtherError(false)
                     setDataError("Same "+ interestedUsers[1]+ " Found")
                     return false
                   }
 
                 } else {
+                  setAnyOtherError(true)
                   setRe_passwordError("Passwords do not match")
                 }
               } else {
+                setAnyOtherError(true)
                 setPasswordError("Password must be atleast of 8 characters")
               }
             } else {
+              setAnyOtherError(true)
               setPasswordError("Password can not be empty")
             }
           } else {
+            setAnyOtherError(true)
             setEmailError("Email not valid")
           }
         } else {
+          setAnyOtherError(true)
           setEmailError("Email can not be empty")
         }
       } else {
+        setAnyOtherError(true)
         setUsernameError("Username can not be empty")
       }
     } else {
+      setAnyOtherError(true)
       setNameError("Name can not be empty")
     }
     return false
@@ -84,6 +108,29 @@ const Register = () => {
   const generateHash = async (string: string) => {
     return await bcrypt.hash(string, 10)
   }
+
+  const resetTheStates = () => {
+    setTypedName("")
+    setTypedUsername("")
+    setTypedEmail("")
+    setTypedPassword("")
+    setTypedRePassword("")
+    setAnyOtherError(false)
+    setDataError("")
+    setNameError("")
+    setUsernameError("")
+    setEmailError("")
+    setPasswordError("")
+    setRe_passwordError("")
+  }
+  
+  const leaveThePage = (route:string, timeInSec:number) => {
+    resetTheStates()
+    setTimeout(() => {
+      navigate(route, { replace: true });
+      dispatch(setShowModal(false))
+    }, timeInSec*1000);
+  } 
   
   // const comparePassword = async (plaintextPassword:string, hash:string) =>  {
   //   const result = await bcrypt.compare(plaintextPassword, hash);
@@ -95,24 +142,26 @@ const Register = () => {
     if (validationMetric) {
       const hashedPassword = await generateHash(typedPassword)
       if (hashedPassword) {
-        const data = {
+        const interestedUser = {
           name: typedName,
           username: typedUsername,
           email: typedEmail,
           password: hashedPassword
         }
-        const res = await insertIntoFirebase(collectionName, data)
-        if (res[0] === 'ok') {
+        const res = await insertIntoFirebase(collectionName, interestedUser)
+        if (res[0] === 'ok') {  
+          dispatch(setMessageForModal(["Almost there !", "Registration Done... You're request has been accepted... Almost there to use the app. The Admin will be taking you onboard soon!"]))
+          dispatch(setShowModal(true))
+          setAnyOtherError(false)
+          setDataError("")
+
+          leaveThePage('/', 5)
           
         } else {
-          if (dataError === "") {
+          if (dataError.trim().length === 0) {
             setDataError("There were some issues creating the account. Please try again")
           }
         }
-      }
-    } else {
-      if (dataError === "") {
-        setDataError("There were some issues creating the account. Please try again")
       }
     }
   }  

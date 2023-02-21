@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import loggedInUserReducer from './features/loggedInUser'
+import modalMessageReducer from './features/modalMessage'
 
 export const store = configureStore({
   reducer: {
-    loggedInUserStore: loggedInUserReducer
+    loggedInUserStore: loggedInUserReducer,
+    modalMessageStore: modalMessageReducer
   },
 })
 
