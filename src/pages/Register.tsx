@@ -1,4 +1,3 @@
-import bcrypt from 'bcryptjs';
 import { useState } from "react";
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -31,25 +30,25 @@ const Register = () => {
 
   const isValidated = async () => {
 
-    if (typedName) {
+    if (typedName.trim().length > 0) {
       setNameError("")
       setAnyOtherError(false)
-      if (typedUsername) {
+      if (typedUsername.trim().length > 0) {
         setUsernameError("")
         setAnyOtherError(false)
-        if (typedEmail) {
+        if (typedEmail.trim().length > 0) {
           setEmailError("")
           setAnyOtherError(false)
           if ((/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w+)+$/.test(typedEmail))) {
             setEmailError("")
             setAnyOtherError(false)
-            if (typedPassword) {
+            if (typedPassword.trim().length > 0) {
               setPasswordError("")
               setAnyOtherError(false)
               if (typedPassword.trim().length >= 8) {
                 setPasswordError("")
                 setAnyOtherError(false)
-                if (typedRePassword === typedPassword) {
+                if (typedRePassword.trim().length > 0 === typedPassword.trim().length > 0) {
 
                   // datas of the form are valid by form validation
                   setRe_passwordError("")
@@ -105,10 +104,6 @@ const Register = () => {
     return false
   }
 
-  const generateHash = async (string: string) => {
-    return await bcrypt.hash(string, 10)
-  }
-
   const resetTheStates = () => {
     setTypedName("")
     setTypedUsername("")
@@ -135,13 +130,11 @@ const Register = () => {
   const createUserWithCreds = async () => {
     const validationMetric = await isValidated()
     if (validationMetric) {
-      const hashedPassword = await generateHash(typedPassword)
-      if (hashedPassword) {
         const interestedUser = {
           name: typedName,
           username: typedUsername,
           email: typedEmail,
-          password: hashedPassword
+          password: typedPassword
         }
         const res = await insertIntoFirebase(collectionName, interestedUser)
         if (res[0] === 'ok') {  
@@ -157,7 +150,6 @@ const Register = () => {
             setDataError("There were some issues creating the account. Please try again")
           }
         }
-      }
     }
   }  
 

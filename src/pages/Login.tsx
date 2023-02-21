@@ -4,24 +4,47 @@ import { auth } from '../firebase.config';
 
 const Login = () => {
 
-  const [typedMail, setTypedMail] = useState("");
+  const [typedEmail, setTypedEmail] = useState("");
   const [typedPassword, setTypedPassword] = useState("");
 
-  // const comparePassword = async (plaintextPassword:string, hash:string) =>  {
-  //   const result = await bcrypt.compare(plaintextPassword, hash);
-  //   return result;
-  // }
+  const [errorPassword, setErrorPassword] = useState("");
+  const [errorEmail, setErrorEmail] = useState("");
+  const [errorData, setErrorData] = useState("");
+
+  const isValidated = () => {
+    if (typedEmail.trim().length > 0) {
+      setErrorEmail("")
+      setErrorData("")
+      if ((/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w+)+$/.test(typedEmail))) { 
+        setErrorEmail("")
+        setErrorData("")
+        if (typedPassword.trim().length > 0) { 
+          setErrorPassword("")
+          setErrorData("")
+          return true;
+        } else {
+          setErrorPassword("Enter Password")
+        }
+      } else {
+        setErrorEmail("Invalid Mail");
+      }
+    } else {
+      setErrorEmail("Email can not be empty");
+    }
+  }
 
   const loginWithCreds = async () => {
-    try {
-      const user = await signInWithEmailAndPassword(
-        auth,
-        typedMail,
-        typedPassword
-      )
-      console.log(user)
-    } catch (err) {
-      console.log(err)
+    if (isValidated()) {
+      try {
+        const user = await signInWithEmailAndPassword(
+          auth,
+          typedEmail,
+          typedPassword
+        )
+        console.log(user)
+      } catch (err) {
+        console.log(err)
+      }
     }
   }
 
@@ -39,23 +62,23 @@ const Login = () => {
               type="email" name="email" id="email"
               placeholder="Your Email"
               className="bg-gray-100 border-2 w-full p-4 rounded-lg"
-              onChange={(event)=>setTypedMail(event.target.value)}
+              onChange={(event)=>setTypedEmail(event.target.value)}
             />
-            {/* <div className="text-red-500 mt-2 text-sm">
-                {{ $message }}
-            </div> */}
+            <div className="text-red-500 mt-2 text-sm">
+                { errorEmail }
+            </div>
           </div>
 
           <div className="mb-4">
             <input
-              type="password" name="password" id="password"
+              type="text" name="password" id="password"
               placeholder="Choose Password"
               className="bg-gray-100 border-2 w-full p-4 rounded-lg"
               onChange={(event)=>setTypedPassword(event.target.value)}
             />
-            {/* <div className="text-red-500 mt-2 text-sm">
-                {{ $message }}
-            </div> */}
+            <div className="text-red-500 mt-2 text-sm">
+                { errorPassword }
+            </div>
           </div>
 
           <div className="mb-4">
@@ -74,6 +97,15 @@ const Login = () => {
               Login
             </button>
           </div>
+
+          {
+            errorData.trim().length > 0 ? 
+              <div className="text-red-500 mt-2 text-sm">
+                {errorData}
+              </div>
+              :
+              <></>
+          }
           
         </div>
       </div>
