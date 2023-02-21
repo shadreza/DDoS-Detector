@@ -19,15 +19,6 @@ const Register = () => {
   const [re_passwordError, setRe_passwordError] = useState<string>("")
   const [dataError, setDataError] = useState<string>("")
 
-  const errMessages = {
-    name: "",
-    username: "",
-    email: "",
-    password: "",
-    re_password: "",
-    data_error: ""
-  }
-
   const collectionName = "interested-users"
 
   const isValidated = async () => {
@@ -38,7 +29,7 @@ const Register = () => {
         setUsernameError("")
         if (typedEmail) {
           setEmailError("")
-          if ((/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(typedEmail))) {
+          if ((/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w+)+$/.test(typedEmail))) {
             setEmailError("")
             if (typedPassword) {
               setPasswordError("")
@@ -101,7 +92,6 @@ const Register = () => {
 
   const createUserWithCreds = async () => {
     const validationMetric = await isValidated()
-    console.log(validationMetric)
     if (validationMetric) {
       const hashedPassword = await generateHash(typedPassword)
       if (hashedPassword) {
@@ -112,10 +102,18 @@ const Register = () => {
           password: hashedPassword
         }
         const res = await insertIntoFirebase(collectionName, data)
-        console.log(res)
+        if (res[0] === 'ok') {
+          
+        } else {
+          if (dataError === "") {
+            setDataError("There were some issues creating the account. Please try again")
+          }
+        }
       }
     } else {
-
+      if (dataError === "") {
+        setDataError("There were some issues creating the account. Please try again")
+      }
     }
   }  
 
