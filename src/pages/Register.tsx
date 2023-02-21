@@ -131,11 +131,6 @@ const Register = () => {
       dispatch(setShowModal(false))
     }, timeInSec*1000);
   } 
-  
-  // const comparePassword = async (plaintextPassword:string, hash:string) =>  {
-  //   const result = await bcrypt.compare(plaintextPassword, hash);
-  //   return result;
-  // }
 
   const createUserWithCreds = async () => {
     const validationMetric = await isValidated()

@@ -7,6 +7,11 @@ const Login = () => {
   const [typedMail, setTypedMail] = useState("");
   const [typedPassword, setTypedPassword] = useState("");
 
+  // const comparePassword = async (plaintextPassword:string, hash:string) =>  {
+  //   const result = await bcrypt.compare(plaintextPassword, hash);
+  //   return result;
+  // }
+
   const loginWithCreds = async () => {
     try {
       const user = await signInWithEmailAndPassword(
