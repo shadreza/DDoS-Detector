@@ -1,0 +1,267 @@
+import bcrypt from 'bcryptjs';
+import { useState } from "react";
+import { insertIntoFirebase } from '../functions/firebase.create';
+import { searchIntoFirebase } from '../functions/firebase.search';
+import { UserInterface } from '../interfaces/user';
+
+const Register = () => {
+
+  const [typedName, setTypedName] = useState<string>("")
+  const [typedUsername, setTypedUsername] = useState<string>("")
+  const [typedEmail, setTypedEmail] = useState<string>("")
+  const [typedPassword, setTypedPassword] = useState<string>("")
+  const [typedRePassword, setTypedRePassword] = useState<string>("")
+
+  const [nameError, setNameError] = useState<string>("")
+  const [usernameError, setUsernameError] = useState<string>("")
+  const [emailError, setEmailError] = useState<string>("")
+  const [passwordError, setPasswordError] = useState<string>("")
+  const [re_passwordError, setRe_passwordError] = useState<string>("")
+  const [dataError, setDataError] = useState<string>("")
+
+  const errMessages = {
+    name: "",
+    username: "",
+    email: "",
+    password: "",
+    re_password: "",
+    data_error: ""
+  }
+
+  const collectionName = "interested-users"
+
+  const isValidated = async () => {
+
+    if (typedName) {
+      setNameError("")
+      if (typedUsername) {
+        setUsernameError("")
+        if (typedEmail) {
+          setEmailError("")
+          if ((/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(typedEmail))) {
+            setEmailError("")
+            if (typedPassword) {
+              setPasswordError("")
+              if (typedPassword.trim().length >= 8) {
+                setPasswordError("")
+                if (typedRePassword === typedPassword) {
+
+                  // datas of the form are valid by form validation
+                  setRe_passwordError("")
+                  setDataError("")
+
+                  // now duplicacy check
+                  const data: UserInterface = {
+                    name: typedName,
+                    username: typedUsername,
+                    email: typedEmail,
+                    password: typedPassword
+                  }
+                  const interestedUsers = await searchIntoFirebase(collectionName, data, ['email', 'username']);
+                  if (!interestedUsers[0]) {
+                    setDataError("")
+                    return true
+                  } else {
+                    setDataError("Same "+ interestedUsers[1]+ " Found")
+                    return false
+                  }
+
+                } else {
+                  setRe_passwordError("Passwords do not match")
+                }
+              } else {
+                setPasswordError("Password must be atleast of 8 characters")
+              }
+            } else {
+              setPasswordError("Password can not be empty")
+            }
+          } else {
+            setEmailError("Email not valid")
+          }
+        } else {
+          setEmailError("Email can not be empty")
+        }
+      } else {
+        setUsernameError("Username can not be empty")
+      }
+    } else {
+      setNameError("Name can not be empty")
+    }
+    return false
+  }
+
+  const generateHash = async (string: string) => {
+    return await bcrypt.hash(string, 10)
+  }
+  
+  // const comparePassword = async (plaintextPassword:string, hash:string) =>  {
+  //   const result = await bcrypt.compare(plaintextPassword, hash);
+  //   return result;
+  // }
+
+  const createUserWithCreds = async () => {
+    const validationMetric = await isValidated()
+    console.log(validationMetric)
+    if (validationMetric) {
+      const hashedPassword = await generateHash(typedPassword)
+      if (hashedPassword) {
+        const data = {
+          name: typedName,
+          username: typedUsername,
+          email: typedEmail,
+          password: hashedPassword
+        }
+        const res = await insertIntoFirebase(collectionName, data)
+        console.log(res)
+      }
+    } else {
+
+    }
+  }  
+
+  return (
+    <div className="flex justify-center items-center">
+      <div className="w-4/12 bg-indigo-200 p-6 rounded-lg">
+        
+        <div>
+          <div className="mb-4">
+            <p className="text-center font-medium text-xl">Register</p>
+          </div>
+
+          <div className="mb-4">
+            <label 
+              className='uppercase text-xs tracking-widest ml-2 relative bottom-0.5 font-bold' 
+              htmlFor="name"
+            >
+              Name
+            </label>
+            <input
+              type="text" name="name" id="name" placeholder="Your name"
+              className="bg-gray-100 border-2 w-full p-4 rounded-lg"
+              onChange={event => setTypedName(event.target.value)}
+            />
+            {
+              nameError.trim().length > 0 ? 
+                <div className="text-red-500 mt-2 text-sm">
+                  {nameError}
+                </div>
+                :
+                <></>
+            }
+            
+          </div>
+
+          <div className="mb-4">
+            <label 
+              className='uppercase text-xs tracking-widest ml-2 relative bottom-0.5 font-bold' 
+              htmlFor="username"
+            >
+              Username
+            </label>
+            <input
+              type="text" name="username" id="username" placeholder="Username"
+              className="bg-gray-100 border-2 w-full p-4 rounded-lg"
+              onChange={event => setTypedUsername(event.target.value)}
+            />
+            {
+              usernameError.trim().length > 0 ? 
+                <div className="text-red-500 mt-2 text-sm">
+                  {usernameError}
+                </div>
+                :
+                <></>
+            }
+          </div>
+
+          <div className="mb-4">
+            <label 
+              className='uppercase text-xs tracking-widest ml-2 relative bottom-0.5 font-bold' 
+              htmlFor="email"
+            >
+              Email
+            </label>
+            <input
+              type="email" name="email" id="email" placeholder="Your Email"
+              className="bg-gray-100 border-2 w-full p-4 rounded-lg"
+              onChange={event => setTypedEmail(event.target.value)}
+            />
+            {
+              emailError.trim().length > 0 ? 
+                <div className="text-red-500 mt-2 text-sm">
+                  {emailError}
+                </div>
+                :
+                <></>
+            }
+          </div>
+
+          <div className="mb-4">
+            <label 
+              className='uppercase text-xs tracking-widest ml-2 relative bottom-0.5 font-bold' 
+              htmlFor="password"
+            >
+              Password
+            </label>
+            <input
+              type="password" name="password" id="password" placeholder="Choose Password"
+              className="bg-gray-100 border-2 w-full p-4 rounded-lg "
+              onChange={event => setTypedPassword(event.target.value)}
+            />
+            {
+              passwordError.trim().length > 0 ? 
+                <div className="text-red-500 mt-2 text-sm">
+                  {passwordError}
+                </div>
+                :
+                <></>
+            }
+          </div>
+
+          <div className="mb-4">
+            <label 
+              className='uppercase text-xs tracking-widest ml-2 relative bottom-0.5 font-bold' 
+              htmlFor="password_confirmation"
+            >
+              Confirm 
+            Password</label>
+            <input
+              type="password" name="password_confirmation" id="password_confirmation"
+              placeholder="Repeat Password" className="bg-gray-100 border-2 w-full p-4 rounded-lg"
+              onChange={event => setTypedRePassword(event.target.value)}
+            />
+            {
+              re_passwordError.trim().length > 0 ? 
+                <div className="text-red-500 mt-2 text-sm">
+                  {re_passwordError}
+                </div>
+                :
+                <></>
+            }
+          </div>
+
+          <div>
+            <button
+              type="submit"
+              className="bg-blue-500 text-white px-4 py-3 rounded font-medium w-full"
+              onClick={createUserWithCreds}
+            >
+              Register
+            </button>
+          </div>
+
+          {
+            dataError.trim().length > 0 ? 
+              <div className="text-red-500 mt-2 text-sm">
+                {dataError}
+              </div>
+              :
+              <></>
+          }
+
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default Register
