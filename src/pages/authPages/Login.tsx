@@ -2,11 +2,11 @@ import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { auth } from '../firebase.config';
-import { searchIntoFirebase } from '../functions/firebase.search';
-import { clearloggedInUserJson, setloggedInUserJson } from '../redux/features/loggedInUser';
-import { setMessageForModal, setShowModal } from '../redux/features/modalMessage';
-import { RootState } from '../redux/store';
+import { auth } from '../../firebase.config';
+import { searchIntoFirebase } from '../../functions/firebase.search';
+import { clearloggedInUserJson, setloggedInUserJson } from '../../redux/features/loggedInUser';
+import { setMessageForModal, setShowModal } from '../../redux/features/modalMessage';
+import { RootState } from '../../redux/store';
 
 const Login = () => {
   

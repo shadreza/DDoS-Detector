@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux"
 import { Outlet } from "react-router-dom"
-import UnAuthorized from "../pages/UnAuthorized"
+import UnAuthorized from "../pages/errorPages/UnAuthorized"
 import { RootState } from "../redux/store"
 
 const ProtectedAdminRoutes = () => {

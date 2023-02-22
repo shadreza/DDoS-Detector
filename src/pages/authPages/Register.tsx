@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { insertIntoFirebase } from '../functions/firebase.create';
-import { searchIntoFirebase } from '../functions/firebase.search';
-import { UserInterface } from '../interfaces/user';
-import { clearMessageForModal, setMessageForModal, setShowModal } from '../redux/features/modalMessage';
-import { RootState } from "../redux/store";
+import { insertIntoFirebase } from '../../functions/firebase.create';
+import { searchIntoFirebase } from '../../functions/firebase.search';
+import { UserInterface } from '../../interfaces/user';
+import { clearMessageForModal, setMessageForModal, setShowModal } from '../../redux/features/modalMessage';
+import { RootState } from "../../redux/store";
 
 const Register = () => {
 
