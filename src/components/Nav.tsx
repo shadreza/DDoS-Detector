@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react';
 import { CloseCircleSharp, LocateSharp, MenuSharp, MoonSharp, SunnySharp } from 'react-ionicons';
+import { useSelector } from 'react-redux';
 import { Link } from "react-router-dom";
+import { RootState } from '../redux/store';
 
 const Nav = () => {
   const [theme, setTheme] = useState<string>(localStorage.theme || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches));
+
+  const { loggedInUserJson } = useSelector((state: RootState) => state.loggedInUserStore)
 
   useEffect(() => {
     if (theme === 'dark') {
@@ -19,13 +23,33 @@ const Nav = () => {
   }
 
   let Links =[
-      {name:"HOME",link:"/"},
-      {name:"PREDICTION",link:"/predict"},
-      {name:"STATISTICS",link:"/stats"},
-      {name:"ABOUT",link:"/about"},
-      {name:"LOGIN",link:"/login"},
-      {name:"REGISTER",link:"/register"},
-    ];
+    { name:"HOME", link:"/"},
+    { name: "ABOUT", link: "/about" },
+  ];
+
+  if (loggedInUserJson === null) {
+    for (let i = 0; i < Links.length; i++) { 
+      if ( Links[i].name === "PREDICTION" || Links[i].name === "STATISTICS") { 
+          Links.splice(i, 1)
+      }
+    }
+    Links.push(
+      { name: "LOGIN", link: "/login" },
+      { name: "REGISTER", link: "/register" }
+    )
+  } else {
+    for (let i = 0; i < Links.length; i++) { 
+      if ( Links[i].name === "LOGIN" || Links[i].name === "REGISTER") { 
+          Links.splice(i, 1)
+      }
+    }
+    Links.push(
+      { name: "PREDICTION", link: "/predict" },
+      { name: "STATISTICS", link: "/stats" },
+      { name: "LOGOUT", link: "/logout" },
+    )
+  }
+
   let [open,setOpen]=useState(false);
 
   return (

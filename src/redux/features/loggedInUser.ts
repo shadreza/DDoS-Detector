@@ -1,22 +1,22 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface TempState {
-  loggedInUserJson: Object[]
+  loggedInUserJson: any
 }
 
 let initialState: TempState = {
-  loggedInUserJson: []
+  loggedInUserJson: {}
 }
 
 export const counterSlice = createSlice({
   name: 'loggedInUserJson',
   initialState,
   reducers: {
-    setloggedInUserJson: (state, action: PayloadAction<Object[]>) => {
+    setloggedInUserJson: (state, action: PayloadAction<Object>) => {
       state.loggedInUserJson = action.payload
     },
     clearloggedInUserJson: (state) => {
-      state.loggedInUserJson = []
+      state.loggedInUserJson = null
     }
   },
 })
