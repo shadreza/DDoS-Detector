@@ -145,7 +145,7 @@ const Login = () => {
 
           <div className="mb-4">
             <input
-              type="text" name="password" id="password"
+              type="password" name="password" id="password"
               placeholder="Choose Password"
               className="bg-gray-100 border-2 w-full p-4 rounded-lg"
               onChange={(event)=>setTypedPassword(event.target.value)}
