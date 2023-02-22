@@ -11,14 +11,13 @@ import { RootState } from '../../redux/store';
 const Login = () => {
   
   const { loggedInUserJson } = useSelector((state: RootState) => state.loggedInUserStore)
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   useEffect(() => {
     if (loggedInUserJson !== null) {
       navigate("/", { replace: true })
     }
   }, [loggedInUserJson])
-  
-  const dispatch = useDispatch();
 
   const changeAuthState = async (passedUserEmail: Object) => {
     const collectionName = 'registered-users'
@@ -110,14 +109,13 @@ const Login = () => {
           .catch(err => {
           const modalTitle = "Failure"
           const errMsg = getTheTrueErrMessage(err.message)
-          const modalMessage = "Credentials don't match. " + errMsg.toUpperCase()
-          dispatch(setMessageForModal([modalTitle, modalMessage]))
+          dispatch(setMessageForModal([modalTitle, errMsg.toUpperCase()]))
           dispatch(setShowModal(true))
           leaveThePage('/login', 3, false)
         })
       } catch (err) {
         dispatch(clearloggedInUserJson())
-        console.log(err)
+
       }
     }
   }

@@ -8,8 +8,8 @@ export const registerUser = async (passedUser: UserInterface) => {
       passedUser.email,
       passedUser.password
     )
-    console.log(user)
+
   } catch (err) {
-    console.log(err)
+
   }
 } 

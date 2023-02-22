@@ -3,11 +3,13 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 export interface TempState {
   loggedInUserJson: any,
   appReady: boolean,
+  isAdmin: boolean,
 }
 
 let initialState: TempState = {
   loggedInUserJson: null,
-  appReady: false
+  appReady: false,
+  isAdmin: false,
 }
 
 export const counterSlice =  createSlice({
@@ -23,6 +25,9 @@ export const counterSlice =  createSlice({
     setAppReady: (state, action: PayloadAction<boolean>) => {
       state.appReady = action.payload
     },
+    setAdmin: (state, action: PayloadAction<boolean>) => {
+      state.isAdmin = action.payload
+    },
     clearloggedInUserJson: (state) => {
       state.loggedInUserJson = null
     }
@@ -30,6 +35,6 @@ export const counterSlice =  createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const {setloggedInUserJson, clearloggedInUserJson} = counterSlice.actions
+export const {setloggedInUserJson, clearloggedInUserJson, setAppReady, setAdmin} = counterSlice.actions
 
 export default counterSlice.reducer

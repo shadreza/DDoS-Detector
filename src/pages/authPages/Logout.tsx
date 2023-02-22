@@ -15,12 +15,10 @@ const Logout = () => {
       navigate("/", { replace: true })
       dispatch(setloggedInUserJson(null))
     }).catch(function(error) {
-      console.log(error)
     });
   }, [])
 
   useEffect(() => {
-    console.log('first')
     if (loggedInUserJson === null) {
       navigate("/", { replace: true })
     }
