@@ -1,7 +1,7 @@
 
 const About = () => {
   return (
-    <div className="bg-white dark:bg-gray-400">About</div>
+    <div className="dark:text-white">About</div>
   )
 }
 
