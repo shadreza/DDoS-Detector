@@ -1,12 +1,21 @@
-import { useState } from "react";
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
 import { insertIntoFirebase } from '../functions/firebase.create';
 import { searchIntoFirebase } from '../functions/firebase.search';
 import { UserInterface } from '../interfaces/user';
-import { setMessageForModal, setShowModal } from '../redux/features/modalMessage';
+import { clearMessageForModal, setMessageForModal, setShowModal } from '../redux/features/modalMessage';
+import { RootState } from "../redux/store";
 
 const Register = () => {
+
+  const { loggedInUserJson } = useSelector((state: RootState) => state.loggedInUserStore)
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (loggedInUserJson !== null) {
+      navigate("/", { replace: true })
+    }
+  }, [loggedInUserJson])
 
   const [typedName, setTypedName] = useState<string>("")
   const [typedUsername, setTypedUsername] = useState<string>("")
@@ -25,8 +34,6 @@ const Register = () => {
   const collectionName = "interested-users"
 
   const dispatch = useDispatch();
-
-  const navigate = useNavigate();
 
   const isValidated = async () => {
 
@@ -124,6 +131,7 @@ const Register = () => {
     setTimeout(() => {
       navigate(route, { replace: true });
       dispatch(setShowModal(false))
+      dispatch(clearMessageForModal())
     }, timeInSec*1000);
   } 
 
@@ -291,6 +299,16 @@ const Register = () => {
               :
               <></>
           }
+
+          <div className='mt-8'>
+            <div className="flex items-center">
+              <span className='text-xs'>Already have an accout? <span>     </span>
+                <Link to="/login">
+                  <span className='text-orange-400 cursor-pointer'>Sign In!</span>
+                </Link>
+              </span>
+            </div>
+          </div>
 
         </div>
       </div>

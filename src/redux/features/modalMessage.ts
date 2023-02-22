@@ -19,11 +19,14 @@ export const counterSlice = createSlice({
     },
     setMessageForModal: (state, action: PayloadAction<string[]>) => {
       state.messageForModal = action.payload
+    },
+    clearMessageForModal: (state) => {
+      state.messageForModal = [""]
     }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const {setShowModal, setMessageForModal} = counterSlice.actions
+export const {setShowModal, setMessageForModal, clearMessageForModal} = counterSlice.actions
 
 export default counterSlice.reducer

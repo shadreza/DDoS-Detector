@@ -27,7 +27,7 @@ const Nav = () => {
     { name: "ABOUT", link: "/about" },
   ];
 
-  if (loggedInUserJson === null) {
+  if (loggedInUserJson == null) {
     for (let i = 0; i < Links.length; i++) { 
       if ( Links[i].name === "PREDICTION" || Links[i].name === "STATISTICS") { 
           Links.splice(i, 1)
@@ -55,9 +55,9 @@ const Nav = () => {
   return (
     <div className='shadow-md w-full fixed top-0 left-0 z-10'>
       <div className='flex items-center justify-between bg-white py-4 md:px-10 px-7'>
-        <div className='font-bold text-2xl cursor-pointer flex items-center text-gray-800'>
+        <div className='font-bold text-xl lg:text-2xl cursor-pointer flex items-center text-gray-800'>
           <Link to="/" className='flex items-center'>
-            <span className='text-3xl text-indigo-600 mr-1 pt-2 relative bottom-1'>
+            <span className='text-indigo-600 mr-1 pt-2 relative bottom-1'>
               <LocateSharp
                 color={'#4b0082'} 
                 title="locate"
@@ -104,7 +104,7 @@ const Nav = () => {
         <ul className={`md:flex md:items-center md:pb-0 pb-12 absolute md:static md:mr-8 bg-white md:z-auto z-[-1] left-0 w-full md:w-auto md:pl-0 pl-9 transition-all duration-500 ease-in ${open ? 'top-20 ':'top-[-490px]'}`}>
           {
             Links.map((link)=>(
-              <li key={link.name} className='md:ml-8 text-xl md:my-0 my-7'>
+              <li key={link.name} className='md:ml-8 text-sm lg:text-xl md:my-0 my-7'>
                 <Link to={link.link} className='text-gray-800 hover:text-gray-400 duration-500'>{link.name}</Link>
               </li>
             ))

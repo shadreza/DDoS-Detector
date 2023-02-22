@@ -1,26 +1,64 @@
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { useState } from "react";
+import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
 import { auth } from '../firebase.config';
+import { searchIntoFirebase } from '../functions/firebase.search';
+import { clearloggedInUserJson, setloggedInUserJson } from '../redux/features/loggedInUser';
+import { setMessageForModal, setShowModal } from '../redux/features/modalMessage';
+import { RootState } from '../redux/store';
 
 const Login = () => {
+  
+  const { loggedInUserJson } = useSelector((state: RootState) => state.loggedInUserStore)
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (loggedInUserJson !== null) {
+      navigate("/", { replace: true })
+    }
+  }, [loggedInUserJson])
+  
+  const dispatch = useDispatch();
+
+  const changeAuthState = async (passedUserEmail: Object) => {
+    const collectionName = 'registered-users'
+    const user = await searchIntoFirebase(collectionName, { email: passedUserEmail }, ['email'])
+    if (user) {
+      onAuthStateChanged(auth, (currentUser) => {
+        if (currentUser && currentUser.email === passedUserEmail) {
+          dispatch(setloggedInUserJson(user[2]))
+        }
+      })
+    }
+  }
 
   const [typedEmail, setTypedEmail] = useState("");
   const [typedPassword, setTypedPassword] = useState("");
 
   const [errorPassword, setErrorPassword] = useState("");
   const [errorEmail, setErrorEmail] = useState("");
-  const [errorData, setErrorData] = useState("");
+
+  const getTheTrueErrMessage = (str: string) => { 
+    let keyword = "auth";
+    let position = str.search(keyword);
+    let startingPosition = position + keyword.length + 1;
+    let errMsg = ""
+    for (let i = startingPosition; i < str.length; i++){
+      if (str[i] === ')') {
+        break;
+      }
+      errMsg += str[i]
+    }
+    return errMsg
+  }
 
   const isValidated = () => {
     if (typedEmail.trim().length > 0) {
       setErrorEmail("")
-      setErrorData("")
       if ((/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w+)+$/.test(typedEmail))) { 
         setErrorEmail("")
-        setErrorData("")
         if (typedPassword.trim().length > 0) { 
           setErrorPassword("")
-          setErrorData("")
           return true;
         } else {
           setErrorPassword("Enter Password")
@@ -33,16 +71,52 @@ const Login = () => {
     }
   }
 
+  const leaveThePage = (route: string, timeInSec: number, leaveIt: boolean) => {
+    setTimeout(() => {
+      if (leaveIt) {
+        navigate(route, { replace: true });
+      }
+      dispatch(setShowModal(false))
+    }, timeInSec*1000);
+  } 
+
   const loginWithCreds = async () => {
     if (isValidated()) {
       try {
-        const user = await signInWithEmailAndPassword(
+        await signInWithEmailAndPassword(
           auth,
           typedEmail,
           typedPassword
-        )
-        console.log(user)
+        ).then(async res => {
+          const userInfo = res.user
+          const gottenEmail = userInfo.email
+          if (gottenEmail) {
+            if ((/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w+)+$/.test(gottenEmail))) {
+              changeAuthState(gottenEmail)
+              const modalTitle = "Success"
+              const modalMessage = "Login Successfull"
+              dispatch(setMessageForModal([modalTitle, modalMessage]))
+              dispatch(setShowModal(true))
+              leaveThePage('/', 2, true)
+            } else {
+              const modalTitle = "Failed"
+              const modalMessage = "Login Unsuccessfull... There maybe some issues with the connection"
+              dispatch(setMessageForModal([modalTitle, modalMessage]))
+              dispatch(setShowModal(true))
+              leaveThePage('/', 3, true)
+            }
+          }
+        })
+          .catch(err => {
+          const modalTitle = "Failure"
+          const errMsg = getTheTrueErrMessage(err.message)
+          const modalMessage = "Credentials don't match. " + errMsg.toUpperCase()
+          dispatch(setMessageForModal([modalTitle, modalMessage]))
+          dispatch(setShowModal(true))
+          leaveThePage('/login', 3, false)
+        })
       } catch (err) {
+        dispatch(clearloggedInUserJson())
         console.log(err)
       }
     }
@@ -81,12 +155,6 @@ const Login = () => {
             </div>
           </div>
 
-          <div className="mb-4">
-            <div className="flex items-center">
-              <input type="checkbox" name="remember" id="remember" className="mr-2" />
-              <span>Remember me</span>
-            </div>
-          </div>
 
           <div>
             <button
@@ -98,14 +166,15 @@ const Login = () => {
             </button>
           </div>
 
-          {
-            errorData.trim().length > 0 ? 
-              <div className="text-red-500 mt-2 text-sm">
-                {errorData}
-              </div>
-              :
-              <></>
-          }
+          <div className='mt-8'>
+            <div className="flex items-center">
+              <span className='text-xs'>Don't have an accout? <span>     </span>
+                <Link to="/register">
+                  <span className='text-blue-400 cursor-pointer'>Create One!</span>
+                </Link>
+              </span>
+            </div>
+          </div>
           
         </div>
       </div>
