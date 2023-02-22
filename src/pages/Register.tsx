@@ -163,7 +163,7 @@ const Register = () => {
 
   return (
     <div className="flex justify-center items-center">
-      <div className="w-4/12 bg-indigo-200 p-6 rounded-lg">
+      <div className="w-2/3 lg:w-2/5 bg-indigo-200 p-6 rounded-lg">
         
         <div>
           <div className="mb-4">

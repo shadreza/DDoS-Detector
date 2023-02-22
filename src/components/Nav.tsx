@@ -105,7 +105,7 @@ const Nav = () => {
           {
             Links.map((link)=>(
               <li key={link.name} className='md:ml-8 text-sm lg:text-xl md:my-0 my-7'>
-                <Link to={link.link} className='text-gray-800 hover:text-gray-400 duration-500'>{link.name}</Link>
+                <Link onClick={() => setOpen(!open)} to={link.link} className='text-gray-800 hover:text-gray-400 duration-500'>{link.name}</Link>
               </li>
             ))
           }
