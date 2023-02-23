@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
+import impFeatureReducer from './features/importantFeatures'
 import loggedInUserReducer from './features/loggedInUser'
 import modalMessageReducer from './features/modalMessage'
 import screenOnMobileInfoReducer from './features/windowInfo'
@@ -7,7 +8,8 @@ export const store = configureStore({
   reducer: {
     loggedInUserStore: loggedInUserReducer,
     modalMessageStore: modalMessageReducer,
-    screenOnMobileInfoStore: screenOnMobileInfoReducer
+    screenOnMobileInfoStore: screenOnMobileInfoReducer,
+    impFeatureStore: impFeatureReducer,
   },
 })
 

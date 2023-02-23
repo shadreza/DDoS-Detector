@@ -1,8 +1,10 @@
-import React from 'react'
+import Table from "../../components/basics/Table"
 
 const Prediction = () => {
   return (
-    <div>Prediction</div>
+    <div>
+      <Table/>
+    </div>
   )
 }
 

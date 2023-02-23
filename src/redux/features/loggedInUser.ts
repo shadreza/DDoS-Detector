@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-export interface TempState {
+export interface UserState {
   loggedInUserJson: any,
   appReady: boolean,
   isAdmin: boolean,
 }
 
-let initialState: TempState = {
+let initialState: UserState = {
   loggedInUserJson: null,
   appReady: false,
   isAdmin: false,

@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-export interface TempState {
+export interface ScreenState {
   isScreenOnMobile: string,
 }
 
-let initialState: TempState = {
+let initialState: ScreenState = {
   isScreenOnMobile: "large",
 }
 
