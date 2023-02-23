@@ -1,4 +1,5 @@
-import { searchOneIntoFirebase } from "./firebase.search"
+import { searchOneIntoFirebase } from "../auth/firebase.search"
+
 
 export const checkAdminState = async (passedUserMail: string, roles: string[]) => {
   const collectionName = 'users'

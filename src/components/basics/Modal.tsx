@@ -1,7 +1,7 @@
 import { CloseCircleSharp } from "react-ionicons";
 import { useDispatch, useSelector } from "react-redux";
-import { setShowModal } from "../redux/features/modalMessage";
-import { RootState } from "../redux/store";
+import { setShowModal } from "../../redux/features/modalMessage";
+import { RootState } from "../../redux/store";
 
 const Modal = () => {
   const dispatch = useDispatch();

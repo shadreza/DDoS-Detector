@@ -1,6 +1,6 @@
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase.config';
-import { UserInterface } from './../interfaces/user';
+import { auth } from '../../firebase.config';
+import { UserInterface } from '../../interfaces/user';
 export const registerUser = async (passedUser: UserInterface) => {
   try {
     await createUserWithEmailAndPassword(

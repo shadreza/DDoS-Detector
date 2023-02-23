@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { CloseCircleSharp, LocateSharp, MenuSharp, MoonSharp, PersonCircleSharp, SunnySharp } from 'react-ionicons';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from "react-router-dom";
-import { setIsScreenOnMobile } from '../redux/features/windowInfo';
-import { RootState } from '../redux/store';
+import { setIsScreenOnMobile } from '../../redux/features/windowInfo';
+import { RootState } from '../../redux/store';
 
 const Nav = () => {
   const [theme, setTheme] = useState<string>(localStorage.theme || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches));

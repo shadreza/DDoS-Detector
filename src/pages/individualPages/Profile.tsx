@@ -1,7 +1,7 @@
 import { CogSharp } from 'react-ionicons';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from "react-router-dom";
-import { checkAdminState } from '../../functions/security.checkAdmin';
+import { checkAdminState } from '../../functions/checks/security.checkAdmin';
 import { setAdmin } from '../../redux/features/loggedInUser';
 import { RootState } from '../../redux/store';
 

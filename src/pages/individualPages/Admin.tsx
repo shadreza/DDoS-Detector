@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { checkAdminState } from "../../functions/security.checkAdmin";
+import { checkAdminState } from "../../functions/checks/security.checkAdmin";
 import { setAdmin } from "../../redux/features/loggedInUser";
 import { setMessageForModal } from "../../redux/features/modalMessage";
 import { RootState } from "../../redux/store";
