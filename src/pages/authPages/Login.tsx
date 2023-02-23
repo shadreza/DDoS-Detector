@@ -123,8 +123,8 @@ const Login = () => {
   }
 
   return (
-    <div className="flex justify-center">
-      <div className="w-2/3 lg:w-2/5 bg-indigo-100 p-6 rounded-lg">
+    <div className="flex justify-center items-center p-2">
+      <div className="w-full md:w-2/3 lg:w-2/5 bg-indigo-100 p-6 rounded-lg">
         <div>
 
           <div className="mb-4">
