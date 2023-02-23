@@ -9,7 +9,8 @@ import AdminUserRegister from "./components/auth/AdminUserRegister";
 import Modal from "./components/Modal";
 import Nav from "./components/Nav";
 import { auth } from "./firebase.config";
-import { searchIntoFirebase } from "./functions/firebase.search";
+import { searchOneIntoFirebase } from "./functions/firebase.search";
+import { getFormattedUser } from "./functions/format.user";
 import Login from "./pages/authPages/Login";
 import Logout from "./pages/authPages/Logout";
 import Register from "./pages/authPages/Register";
@@ -32,15 +33,15 @@ function App() {
   const dispatch = useDispatch();
 
   const getTheFullUserInfo = async (passedUserEmail: any) => {
-    const collectionName = 'registered-users'
-    return await searchIntoFirebase(collectionName, { email: passedUserEmail }, ['email'])
+    const collectionName = 'interested-users'
+    return await searchOneIntoFirebase(collectionName, { email: passedUserEmail }, ['email'])
   }
 
   const changeAuthState = async () => {
     onAuthStateChanged(auth, async (currentUser) => {
       const userInfo = await getTheFullUserInfo(currentUser?.email)
       if (userInfo[0]) {
-        dispatch(setloggedInUserJson(userInfo[2]))
+        dispatch(setloggedInUserJson(getFormattedUser(userInfo[2])))
       } else {
         dispatch(setloggedInUserJson(null))
       }

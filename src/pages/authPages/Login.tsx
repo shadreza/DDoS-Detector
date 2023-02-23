@@ -3,9 +3,10 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { auth } from '../../firebase.config';
-import { searchIntoFirebase } from '../../functions/firebase.search';
+import { searchOneIntoFirebase } from '../../functions/firebase.search';
+import { getFormattedUser } from '../../functions/format.user';
 import { clearloggedInUserJson, setloggedInUserJson } from '../../redux/features/loggedInUser';
-import { setMessageForModal, setShowModal } from '../../redux/features/modalMessage';
+import { clearMessageForModal, setMessageForModal, setShowModal } from '../../redux/features/modalMessage';
 import { RootState } from '../../redux/store';
 
 const Login = () => {
@@ -20,12 +21,12 @@ const Login = () => {
   }, [loggedInUserJson])
 
   const changeAuthState = async (passedUserEmail: Object) => {
-    const collectionName = 'registered-users'
-    const user = await searchIntoFirebase(collectionName, { email: passedUserEmail }, ['email'])
+    const collectionName = 'interested-users'
+    const user = await searchOneIntoFirebase(collectionName, { email: passedUserEmail }, ['email'])
     if (user) {
       onAuthStateChanged(auth, (currentUser) => {
         if (currentUser && currentUser.email === passedUserEmail) {
-          dispatch(setloggedInUserJson(user[2]))
+          dispatch(setloggedInUserJson(getFormattedUser(user[2])))
         }
       })
     }
@@ -75,6 +76,7 @@ const Login = () => {
       if (leaveIt) {
         navigate(route, { replace: true });
       }
+      dispatch(clearMessageForModal())
       dispatch(setShowModal(false))
     }, timeInSec*1000);
   } 

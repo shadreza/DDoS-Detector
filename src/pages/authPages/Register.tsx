@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { insertIntoFirebase } from '../../functions/firebase.create';
-import { searchIntoFirebase } from '../../functions/firebase.search';
+import { searchOneIntoFirebase } from '../../functions/firebase.search';
 import { UserInterface } from '../../interfaces/user';
 import { clearMessageForModal, setMessageForModal, setShowModal } from '../../redux/features/modalMessage';
 import { RootState } from "../../redux/store";
@@ -69,7 +69,7 @@ const Register = () => {
                     email: typedEmail,
                     password: typedPassword
                   }
-                  const interestedUsers = await searchIntoFirebase(collectionName, data, ['email', 'username']);
+                  const interestedUsers = await searchOneIntoFirebase(collectionName, data, ['email', 'username']);
                   if (!interestedUsers[0]) {
                     setDataError("")
                     setAnyOtherError(false)
@@ -142,7 +142,10 @@ const Register = () => {
           name: typedName,
           username: typedUsername,
           email: typedEmail,
-          password: typedPassword
+          password: typedPassword,
+          role: 'interested',
+          createdAt: new Date(),
+          updatedAt: new Date()
         }
         const res = await insertIntoFirebase(collectionName, interestedUser)
         if (res[0] === 'ok') {  
@@ -163,7 +166,7 @@ const Register = () => {
 
   return (
     <div className="flex justify-center items-center">
-      <div className="w-2/3 lg:w-2/5 bg-indigo-200 p-6 rounded-lg">
+      <div className="w-2/3 lg:w-2/5 bg-indigo-200 p-6 rounded-lg max-h-[85vh] overflow-y-auto">
         
         <div>
           <div className="mb-4">

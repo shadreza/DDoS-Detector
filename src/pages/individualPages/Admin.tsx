@@ -37,7 +37,7 @@ const Admin = () => {
             <div className="flex justify-around items-center w-full mt-6 mb-4">
               {
                 adminSettingOptions.map(option => 
-                  <Link to={option.link} className=" hover:animate-pulse border-indigo-500 dark:hover:border-indigo-400 border-2 pl-2 pr-2 pt-1 pb-1 rounded-xl">
+                  <Link key={option.name} to={option.link} className=" hover:animate-pulse border-indigo-500 dark:hover:border-indigo-400 border-2 pl-2 pr-2 pt-1 pb-1 rounded-xl">
                     <span className="dark:text-white dark:hover:text-red-300">
                       {option.name}
                     </span>

@@ -1,5 +1,5 @@
 import { readFromFirebase } from './firebase.read';
-export const searchIntoFirebase = async (collectionName:string, passedData:any, propsForCheck:string[]) => {
+export const searchOneIntoFirebase = async (collectionName:string, passedData:any, propsForCheck:string[]) => {
   const result = await readFromFirebase(collectionName)
   const datas: any = result[1]
   for (let i = 0; i < datas.docs.length; i++) {

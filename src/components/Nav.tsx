@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
 import { CloseCircleSharp, LocateSharp, MenuSharp, MoonSharp, PersonCircleSharp, SunnySharp } from 'react-ionicons';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from "react-router-dom";
+import { setIsScreenOnMobile } from '../redux/features/windowInfo';
 import { RootState } from '../redux/store';
 
 const Nav = () => {
   const [theme, setTheme] = useState<string>(localStorage.theme || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches));
 
   const { loggedInUserJson } = useSelector((state: RootState) => state.loggedInUserStore)
+
+  const dispatch = useDispatch()
 
   useEffect(() => {
     if (theme === 'dark') {
@@ -61,9 +64,15 @@ const Nav = () => {
 
   const checkSizingIssue = () => {
     if (window.innerWidth > 767) {
+      dispatch(setIsScreenOnMobile('medium'))
+      if (window.innerWidth > 1080) {
+        dispatch(setIsScreenOnMobile('large'))
+      }
       if (open) {
         setOpen(false)
       }
+    } else {
+      dispatch(setIsScreenOnMobile('small'))
     }
   }
 
