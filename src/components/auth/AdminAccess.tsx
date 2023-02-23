@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
-import { ThumbsDown, Trash } from 'react-ionicons'
+import { Barbell, ThumbsDown, Trash } from 'react-ionicons'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteDocument } from '../../functions/auth/firebase.deleteDocument'
 import { readAllCertainData } from '../../functions/auth/firebase.readAllCertainData'
 import { updateDocumnet } from '../../functions/auth/firebase.updateDocument'
+import { checkAdminState } from '../../functions/checks/security.checkAdmin'
 import { getDateTime } from '../../functions/formatter/format.user'
 import { clearMessageForModal, setMessageForModal, setShowModal } from '../../redux/features/modalMessage'
 import { RootState } from '../../redux/store'
@@ -11,8 +12,20 @@ import { RootState } from '../../redux/store'
 const AdminAccess = () => {
 
   const dispatch = useDispatch()
+  const [isMaster, setIsMaster] = useState(false)
 
   const { loggedInUserJson } = useSelector((state: RootState) => state.loggedInUserStore)
+  
+  const checkMaster = () => {
+    if (loggedInUserJson !== null) {
+      checkAdminState(loggedInUserJson.email, ['master'])
+        .then(res => {
+          setIsMaster(res)
+        }).catch(err => { 
+          setIsMaster(false)
+        })
+    }
+  }
 
   const [documentToggler, setDocumentToggler] = useState(false)
 
@@ -47,13 +60,16 @@ const AdminAccess = () => {
       })
   }
 
-  const removeAdminAccess = async (userId: string) => {
-    const role = "registered"
+  const alterAdminPrivilage = async (userId: string, role: string) => {
     const updatedRole = { "role": role }
     const collectionName = "users"
     const result = await updateDocumnet(collectionName, userId, updatedRole)
     if (result) {
-      dispatch(setMessageForModal(["Success", "Remoed From Admin Panel" ]))
+      let msg = "Remoed From Admin Panel"
+      if (role === 'master') {
+        msg = "Added to Master Admin"
+      }
+      dispatch(setMessageForModal(["Success", msg ]))
       dispatch(setShowModal(true))
       clearModalWithinSec(3)
       setDocumentToggler(!documentToggler)
@@ -78,6 +94,10 @@ const AdminAccess = () => {
       clearModalWithinSec(3)
     }
   }
+
+  useEffect(() => {
+    checkMaster()
+  }, [])
 
   useEffect(() => {
     getAllAdmins()
@@ -196,23 +216,35 @@ const AdminAccess = () => {
                             <div></div>
                     }
                       {
-                        loggedInUserJson.role === 'master' ?
+                        user.role === 'admin' && isMaster ?
                           <div className='text-center mb-4'>
                             <div className='flex justify-center items-center'>
                               <span
                                 className='cursor-pointer mr-8 flex items-center hover:bg-violet-200 p-2 rounded'
-                                onClick={()=>removeAdminAccess(user.id)}
+                                onClick={()=>alterAdminPrivilage(user.id, 'registered')}
                               >
                                 <span className='mr-4 text-sm font-bold lowercase'>dethrone as admin</span>
                                 <ThumbsDown
                                   color={'#1aa7ec'} 
-                                  title="edit-user"
+                                  title="dethrone-admin"
+                                  height='28px'
+                                  width='28px'
+                                />
+                              </span>
+                            <span
+                                className='cursor-pointer mr-8 flex items-center hover:bg-orange-200 p-2 rounded'
+                                onClick={()=>alterAdminPrivilage(user.id, 'master')}
+                              >
+                                <span className='mr-4 text-sm font-bold lowercase'>make master</span>
+                                <Barbell
+                                  color={'#ff781f'} 
+                                  title="make-master"
                                   height='28px'
                                   width='28px'
                                 />
                               </span>
                               <span
-                                className='cursor-pointer mr-8 flex items-center hover:bg-orange-200 p-2 rounded'
+                                className='cursor-pointer mr-8 flex items-center hover:bg-rose-200 p-2 rounded'
                                 onClick={()=>deleteAdmin(user.id)}
                               >
                                 <Trash
