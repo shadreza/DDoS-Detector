@@ -9,7 +9,7 @@ const Profile = () => {
   const { loggedInUserJson, isAdmin } = useSelector((state: RootState) => state.loggedInUserStore)
   const dispatch = useDispatch();
   if (loggedInUserJson !== null) {
-    checkAdminState(loggedInUserJson.email, 'admin')
+    checkAdminState(loggedInUserJson.email, ['admin', 'master'])
       .then(res => {
         dispatch(setAdmin(res))
       }).catch(err => { 

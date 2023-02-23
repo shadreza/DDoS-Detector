@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import AdminAccess from "./components/auth/AdminAccess";
 import AdminUserRegister from "./components/auth/AdminUserRegister";
+import UserAccess from "./components/auth/UserAccess";
 import Modal from "./components/Modal";
 import Nav from "./components/Nav";
 import { auth } from "./firebase.config";
@@ -33,7 +34,7 @@ function App() {
   const dispatch = useDispatch();
 
   const getTheFullUserInfo = async (passedUserEmail: any) => {
-    const collectionName = 'interested-users'
+    const collectionName = 'users'
     return await searchOneIntoFirebase(collectionName, { email: passedUserEmail }, ['email'])
   }
 
@@ -73,8 +74,9 @@ function App() {
                 {/* registered && loggedin user can see -> predict & stats */}
                 <Route element={<ProtectedAdminRoutes />}>
                   <Route path="/admin" element={<Admin />}>
-                    <Route path="/admin/register" element={<AdminUserRegister />}></Route>
-                    <Route path="/admin/access" element={<AdminAccess />}></Route>
+                    <Route path="/admin/register/users" element={<AdminUserRegister />}></Route>
+                    <Route path="/admin/access/admins" element={<AdminAccess />}></Route>
+                    <Route path="/admin/access/users" element={<UserAccess />}></Route>
                   </Route>
                   <Route path="/predict" element={<Prediction/>}></Route>
                   <Route path="/stats" element={<Stats/>}></Route>

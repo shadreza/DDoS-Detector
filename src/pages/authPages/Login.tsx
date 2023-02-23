@@ -21,7 +21,7 @@ const Login = () => {
   }, [loggedInUserJson])
 
   const changeAuthState = async (passedUserEmail: Object) => {
-    const collectionName = 'interested-users'
+    const collectionName = 'users'
     const user = await searchOneIntoFirebase(collectionName, { email: passedUserEmail }, ['email'])
     if (user) {
       onAuthStateChanged(auth, (currentUser) => {

@@ -31,7 +31,7 @@ const Register = () => {
   const [anyOtherError, setAnyOtherError] = useState<boolean>(false)
   const [dataError, setDataError] = useState<string>("")
 
-  const collectionName = "interested-users"
+  const collectionName = "users"
 
   const dispatch = useDispatch();
 
@@ -148,12 +148,12 @@ const Register = () => {
           updatedAt: new Date()
         }
         const res = await insertIntoFirebase(collectionName, interestedUser)
-        if (res[0] === 'ok') {  
+      if (res[0] === 'ok') {  
+          resetTheStates()
           dispatch(setMessageForModal(["Almost there !", "Registration Done... You're request has been accepted... Almost there to use the app. The Admin will be taking you onboard soon!"]))
           dispatch(setShowModal(true))
           setAnyOtherError(false)
           setDataError("")
-
           leaveThePage('/', 5)
           
         } else {

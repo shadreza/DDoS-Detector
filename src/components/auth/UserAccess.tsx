@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ThumbsDown, Trash } from 'react-ionicons'
+import { Settings, Trash } from 'react-ionicons'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteDocument } from '../../functions/firebase.deleteDocument'
 import { readAllCertainData } from '../../functions/firebase.readAllCertainData'
@@ -8,17 +8,15 @@ import { getDateTime } from '../../functions/format.user'
 import { clearMessageForModal, setMessageForModal, setShowModal } from '../../redux/features/modalMessage'
 import { RootState } from '../../redux/store'
 
-const AdminAccess = () => {
+const UserAccess = () => {
 
   const dispatch = useDispatch()
-
-  const { loggedInUserJson } = useSelector((state: RootState) => state.loggedInUserStore)
 
   const [documentToggler, setDocumentToggler] = useState(false)
 
   const { isScreenOnMobile } = useSelector((state: RootState) => state.screenOnMobileInfoStore)
 
-  const [admins, setAdmins] = useState<any[]>([])
+  const [registeredUsers, setRegisteredUsers] = useState<any[]>([])
 
   const clearModalWithinSec = (timeInSec:number) => {
     setTimeout(() => {
@@ -27,73 +25,73 @@ const AdminAccess = () => {
     }, timeInSec*1000);
   }
 
-  const getAllAdmins = async () => {
+  const getAllRegisteredUsers = async () => {
     let collectionName = 'users'
-    const propsForCheck = [{"key": "role", "value": ["admin", "master"]}]
+    const propsForCheck = [{key:'role', value: ['registered', 'admin', 'master']}]
     readAllCertainData(collectionName, propsForCheck)
       .then(res => {
         if (res) {
-          setAdmins(res)
+          setRegisteredUsers(res)
         } else {
-          dispatch(setMessageForModal(["Failed", "Network Issue Failed to Load Registered Admin Database"]))
+          dispatch(setMessageForModal(["Failed", "Network Issue Failed to Load Registered Users Database"]))
           dispatch(setShowModal(true))
           clearModalWithinSec(3)
         }
       })
       .catch(err => {
-        dispatch(setMessageForModal(["Failed", "Network Issue Failed to Load Registered Admin Database"]))
+        dispatch(setMessageForModal(["Failed", "Network Issue Failed to Load Registered Users Database"]))
         dispatch(setShowModal(true))
         clearModalWithinSec(3)
       })
   }
 
-  const removeAdminAccess = async (userId: string) => {
-    const role = "registered"
+  const permitAdminAccess = async (userId: string) => {
+    const role = "admin"
     const updatedRole = { "role": role }
     const collectionName = "users"
     const result = await updateDocumnet(collectionName, userId, updatedRole)
     if (result) {
-      dispatch(setMessageForModal(["Success", "Remoed From Admin Panel" ]))
+      dispatch(setMessageForModal(["Success", "User Privilage Updated to" + role.toUpperCase() ]))
       dispatch(setShowModal(true))
       clearModalWithinSec(3)
       setDocumentToggler(!documentToggler)
     } else {
-      dispatch(setMessageForModal(["Failed", "Admin Privilage could not be changed... Please try again later"]))
+      dispatch(setMessageForModal(["Failed", "Users Privilage could not be changed... Please try again later"]))
       dispatch(setShowModal(true))
       clearModalWithinSec(3)
     }
   }
 
-  const deleteAdmin = async (userId: string) => {
+  const deleteUser = async (userId: string) => {
     const collectionName = "users"
     const result = await deleteDocument(collectionName, userId)
     if (result) {
-      dispatch(setMessageForModal(["Success", "Admin deleted from our database"]))
+      dispatch(setMessageForModal(["Success", "User deleted from our database"]))
       dispatch(setShowModal(true))
       clearModalWithinSec(3)
       setDocumentToggler(!documentToggler)
     } else {
-      dispatch(setMessageForModal(["Failed", "Admin deleteion could not be done... Please try again later"]))
+      dispatch(setMessageForModal(["Failed", "Users deleteion could not be done... Please try again later"]))
       dispatch(setShowModal(true))
       clearModalWithinSec(3)
     }
   }
 
   useEffect(() => {
-    getAllAdmins()
+    getAllRegisteredUsers()
   }, [documentToggler])
   
 
   return (
     <div className='mt-10 p-2 text-center ml-auto mr-auto'>
       {
-        admins[0] !== null ?
+        registeredUsers[0] !== null ?
           <div className='bg-sky-100 rounded p-4'>
-            <p className='font-bold tracking-widest mb-2'>Admin Users Controll Room</p>
-            <p className='text-sm mb-6'> <span className='font-bold text-orange-500'>{admins.length}</span> { admins.length === 1 ? 'admin is' : 'admins are' } present</p>
+            <p className='font-bold tracking-widest mb-2'>Registered Users Access Room</p>
+            <p className='text-sm mb-6'> <span className='font-bold text-orange-500'>{registeredUsers.length}</span> registered { registeredUsers.length === 1 ? 'user has' : 'users have' } access of using the site</p>
             <div className='bg-orange-100 pl-4 pr-4 rounded max-h-[50vh] overflow-y-auto'>
               {
-                admins.map(user => 
+                registeredUsers.map(user => 
                   <div key={user.email} className="mb-4 mt-4 border-2 border-orange-300 rounded">
                     {
                       (user && user.name && user.email && user.username && user.role && user.createdAt) && isScreenOnMobile === 'small' ?
@@ -195,16 +193,17 @@ const AdminAccess = () => {
                             :
                             <div></div>
                     }
+                    <>
                       {
-                        loggedInUserJson.role === 'master' ?
+                        user.role === 'registered' ?
                           <div className='text-center mb-4'>
                             <div className='flex justify-center items-center'>
                               <span
-                                className='cursor-pointer mr-8 flex items-center hover:bg-violet-200 p-2 rounded'
-                                onClick={()=>removeAdminAccess(user.id)}
+                                className='cursor-pointer mr-8 flex items-center hover:bg-green-200 p-2 rounded'
+                                onClick={()=>permitAdminAccess(user.id)}
                               >
-                                <span className='mr-4 text-sm font-bold lowercase'>dethrone as admin</span>
-                                <ThumbsDown
+                                <span className='mr-4 text-sm font-bold lowercase'>Grant Admin Control</span>
+                                <Settings
                                   color={'#1aa7ec'} 
                                   title="edit-user"
                                   height='28px'
@@ -213,7 +212,7 @@ const AdminAccess = () => {
                               </span>
                               <span
                                 className='cursor-pointer mr-8 flex items-center hover:bg-orange-200 p-2 rounded'
-                                onClick={()=>deleteAdmin(user.id)}
+                                onClick={()=>deleteUser(user.id)}
                               >
                                 <Trash
                                   color={'#e63b60'} 
@@ -221,13 +220,14 @@ const AdminAccess = () => {
                                   height='28px'
                                   width='28px'
                                 />
-                                <span className='ml-4 text-sm font-bold lowercase'>Remove user</span>
+                                <span className='ml-4 text-sm font-bold lowercase'>Remove User</span>
                               </span>
                             </div>
                           </div>
                           :
                           <></>
                       }
+                    </>
                   </div>
                 )
               }
@@ -241,4 +241,4 @@ const AdminAccess = () => {
   )
 }
 
-export default AdminAccess
+export default UserAccess

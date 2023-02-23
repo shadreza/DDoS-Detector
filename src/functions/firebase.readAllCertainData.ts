@@ -12,8 +12,11 @@ export const readAllCertainData = async (collectionName: string, propsForCheck: 
         numberOfValidationPassed = 1
         break
       } else {
-        if (doc.data()[propsForCheck[j].key] === propsForCheck[j].value) {
-          numberOfValidationPassed += 1
+        for (let k = 0; k < propsForCheck[j].value.length; k++) { 
+          const value = propsForCheck[j].value[k]
+          if (doc.data()[propsForCheck[j].key] === value) {
+            numberOfValidationPassed += 1
+          }
         }
       }
     }

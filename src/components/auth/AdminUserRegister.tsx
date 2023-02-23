@@ -3,8 +3,10 @@ import { PersonAdd, Trash } from 'react-ionicons'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteDocument } from '../../functions/firebase.deleteDocument'
 import { readAllCertainData } from '../../functions/firebase.readAllCertainData'
+import { registerUser } from '../../functions/firebase.registerUser'
 import { updateDocumnet } from '../../functions/firebase.updateDocument'
 import { getDateTime } from '../../functions/format.user'
+import { UserInterface } from '../../interfaces/user'
 import { clearMessageForModal, setMessageForModal, setShowModal } from '../../redux/features/modalMessage'
 import { RootState } from '../../redux/store'
 
@@ -26,8 +28,8 @@ const AdminUserRegister = () => {
   }
 
   const getAllInterestedUsers = async () => {
-    let collectionName = 'interested-users'
-    const propsForCheck = [{key:'role', value: 'interested'}]
+    let collectionName = 'users'
+    const propsForCheck = [{key:'role', value: ['interested']}]
     readAllCertainData(collectionName, propsForCheck)
       .then(res => {
         if (res) {
@@ -45,24 +47,32 @@ const AdminUserRegister = () => {
       })
   }
 
-  const permitUser = async (userId: string) => {
+  const permitUser = async (user:UserInterface, userId: string) => {
     const updatedRole = { "role": "registered" }
-    const collectionName = "interested-users"
-    const result = await updateDocumnet(collectionName, userId, updatedRole)
-    if (result) {
-      dispatch(setMessageForModal(["Success", "User can now use the siite... Registered"]))
-      dispatch(setShowModal(true))
-      clearModalWithinSec(3)
-      setDocumentToggler(!documentToggler)
+    const collectionName = "users"
+    const createdUserResult = await registerUser(user)
+    if (createdUserResult) {
+      const result = await updateDocumnet(collectionName, userId, updatedRole)
+      if (result) {
+        dispatch(setMessageForModal(["Success", "User can now use the siite... Registered"]))
+        dispatch(setShowModal(true))
+        clearModalWithinSec(3)
+        setDocumentToggler(!documentToggler)
+      } else {
+        dispatch(setMessageForModal(["Failed", "Users permission could not be changed... Please try again later"]))
+        dispatch(setShowModal(true))
+        clearModalWithinSec(3)
+      }
     } else {
-      dispatch(setMessageForModal(["Failed", "Users permission could not be changed... Please try again later"]))
+      dispatch(setMessageForModal(["Failed", "Users could not be created... Please try again later"]))
       dispatch(setShowModal(true))
       clearModalWithinSec(3)
     }
+    
   }
 
   const deleteUser = async (userId: string) => {
-    const collectionName = "interested-users"
+    const collectionName = "users"
     const result = await deleteDocument(collectionName, userId)
     if (result) {
       dispatch(setMessageForModal(["Success", "User deleted from our database"]))
@@ -86,7 +96,7 @@ const AdminUserRegister = () => {
       {
         allUsers[0] !== null ?
           <div className='bg-sky-100 rounded p-4'>
-            <p className='font-bold tracking-widest mb-2'>Register Users</p>
+            <p className='font-bold tracking-widest mb-2'>Register Users Control Room</p>
             <p className='text-sm mb-6'> <span className='font-bold text-orange-500'>{allUsers.length}</span> { allUsers.length === 1 ? 'user is' : 'users are' } waiting for <span className='uppercase font-bold text-red-500'>your approval</span> to use the site</p>
             <div className='bg-orange-100 pl-4 pr-4 rounded max-h-[50vh] overflow-y-auto'>
               {
@@ -196,7 +206,7 @@ const AdminUserRegister = () => {
                       <div className='flex justify-center items-center'>
                         <span
                           className='cursor-pointer mr-8 flex items-center hover:bg-green-200 p-2 rounded'
-                          onClick={()=>permitUser(user.id)}
+                          onClick={()=>permitUser(user, user.id)}
                         >
                           <span className='mr-4 text-sm font-bold lowercase'>Permit</span>
                           <PersonAdd
