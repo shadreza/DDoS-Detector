@@ -14,22 +14,25 @@ const stepInfos = [
   "Result"
 ]
 
+const index = 0
+
 export interface InstructionInfoState {
   instruction: string,
   showInstruction: boolean,
   stepCount: number,
   stepInfo: string,
-  breezeThroughSteps: boolean,
+  shallFlowBeBroken: boolean,
   maxStepCount: number
 }
 
+
 let initialState: InstructionInfoState = {
-  instruction: instructions[0],
+  instruction: instructions[index],
   showInstruction: false,
-  stepCount: 0,
-  stepInfo: stepInfos[0],
-  breezeThroughSteps: false,
-  maxStepCount: 0
+  stepCount: index,
+  stepInfo: stepInfos[index],
+  shallFlowBeBroken: false,
+  maxStepCount: index
 }
 
 export const counterSlice =  createSlice({
@@ -37,20 +40,21 @@ export const counterSlice =  createSlice({
   initialState,
   reducers: {
     setStepCount: (state, action: PayloadAction<number>) => {
-      if (state.stepCount >= 0 && state.stepCount <=3) {
-        state.stepInfo = stepInfos[action.payload]
-        state.instruction = instructions[action.payload]
-        state.stepCount = action.payload
+      let resLoad = 0
+      if (action.payload >= 0 && action.payload <= 3) {
         if (action.payload > state.maxStepCount) { 
-          state.stepCount = state.maxStepCount
+          resLoad = state.maxStepCount
+        } else {
+          resLoad = action.payload
         }
-      } else {
-        state.stepInfo = ""
-        state.instruction = ""
-      }
+      } 
+      state.stepInfo = stepInfos[resLoad]
+      state.instruction = instructions[resLoad]
+      state.stepCount = resLoad
     },
+
     setMaxStepCount: (state, action: PayloadAction<number>) => {
-      if (state.stepCount >= 0 && state.stepCount <= 3) {
+      if (action.payload >= 0 && action.payload <= 3) {
         state.maxStepCount = action.payload
         if (state.stepCount > action.payload) {
           state.stepInfo = stepInfos[action.payload]
@@ -62,13 +66,13 @@ export const counterSlice =  createSlice({
     setShowInstruction: (state, action: PayloadAction<boolean>) => {
       state.showInstruction = action.payload
     },
-    setBreezeThroughSteps: (state, action: PayloadAction<boolean>) => {
-      state.breezeThroughSteps = action.payload
+    setShallFlowBeBroken: (state, action: PayloadAction<boolean>) => {
+      state.shallFlowBeBroken = action.payload
     },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const {setShowInstruction, setStepCount, setBreezeThroughSteps, setMaxStepCount} = counterSlice.actions
+export const {setShowInstruction, setStepCount, setShallFlowBeBroken, setMaxStepCount} = counterSlice.actions
 
 export default counterSlice.reducer
