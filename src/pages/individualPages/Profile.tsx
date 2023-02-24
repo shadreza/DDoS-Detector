@@ -1,4 +1,5 @@
-import { CogSharp } from 'react-ionicons';
+import { useState } from 'react';
+import { CogSharp, Eye, EyeOff } from 'react-ionicons';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from "react-router-dom";
 import { checkAdminState } from '../../functions/checks/security.checkAdmin';
@@ -8,6 +9,9 @@ import { RootState } from '../../redux/store';
 const Profile = () => {
   const { loggedInUserJson, isAdmin } = useSelector((state: RootState) => state.loggedInUserStore)
   const dispatch = useDispatch();
+  const [showPassword, setShowPassword] = useState(false)
+  const hiddenPassword = "..^.._/|\\_..^.."
+
   if (loggedInUserJson !== null) {
     checkAdminState(loggedInUserJson.email, ['admin', 'master'])
       .then(res => {
@@ -26,17 +30,38 @@ const Profile = () => {
               <span className='text-sm font-bold block dark:text-orange-300 font-mono mt-2'>Profile</span>
             </p>
             <div className='bg-slate-300 m-auto w-2/3 lg:w-1/2 rounded pt-10 pb-4 '>
-              <p className='bg-slate-100 w-[80%] m-auto rounded flex justify-between p-2 mb-6'>
+              <p className='bg-slate-100 w-[80%] m-auto rounded flex justify-between items-center p-2 mb-6'>
                 <span className='font-bold'>Name</span>
                 <span>{loggedInUserJson.name.toUpperCase()}</span>
               </p>
-              <p className='bg-slate-100 w-[80%] m-auto rounded flex justify-between p-2 mb-6'>
+              <p className='bg-slate-100 w-[80%] m-auto rounded flex justify-between items-center p-2 mb-6'>
                 <span className='font-bold'>Username</span>
                 <span>{loggedInUserJson.username}</span>
               </p>
-              <p className='bg-slate-100 w-[80%] m-auto rounded flex justify-between p-2 mb-6'>
+              <p className='bg-slate-100 w-[80%] m-auto rounded flex justify-between items-center p-2 mb-6'>
                 <span className='font-bold'>Email</span>
                 <span>{loggedInUserJson.email}</span>
+              </p>
+              <p className='bg-slate-100 w-[80%] m-auto rounded flex justify-between items-center p-2 mb-6'>
+                <span className='font-bold'>Password</span>
+                {
+                showPassword ?
+                  <span>
+                    <span className='flex items-center'>
+                      <span>{loggedInUserJson.password}</span>
+                      <span className='ml-4 cursor-pointer' onClick={()=>setShowPassword(!showPassword)}>
+                        <EyeOff title="reveal-password"/>
+                      </span>
+                  </span>
+                  </span>
+                  :
+                    <span className='flex items-center'>
+                      <span>{hiddenPassword}</span>
+                      <span className='ml-4 cursor-pointer' onClick={()=>setShowPassword(!showPassword)}>
+                        <Eye title="hide-password"/>
+                      </span>
+                  </span>
+                }
               </p>
               <div className='text-center'>
                 {
