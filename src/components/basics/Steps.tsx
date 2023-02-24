@@ -19,7 +19,7 @@ const Steps = () => {
   return (
     <div className="tex-center pb-4 mb-4 flex-col">
       <div className="h-full w-full flex justify-center items-center">
-        <span className="mr-8 cursor-pointer" onClick={()=>{changeStepNumber(stepCount - 1)}}>
+        <span className="mr-4  sm:mr-8 cursor-pointer" onClick={()=>{changeStepNumber(stepCount - 1)}}>
           <ArrowBackCircle title="back" shake color="#FD8A8A"/>
         </span>
         <div className="bg-slate-100 dark:bg-black w-fit flex p-2 rounded-2xl items-center z-0">
@@ -47,9 +47,9 @@ const Steps = () => {
     
           {
             maxStepCount > 0 ?
-                <div className="w-20 bg-indigo-400 h-1 z-10"></div>
+                <div className="w-10 sm:w-20 bg-indigo-400 h-1 z-10"></div>
                 :
-                <div className="w-20 bg-white dark:bg-slate-100  h-1 z-10"></div>
+                <div className="w-10 sm:w-20 bg-white dark:bg-slate-100  h-1 z-10"></div>
     }
     <div className="cursor-pointer bg-white dark:bg-slate-100 h-8 w-8 rounded-full shadow z-20 flex items-center justify-center">
       {
@@ -74,9 +74,9 @@ const Steps = () => {
     
           {
             maxStepCount > 1 ?
-                <div className="w-20 bg-indigo-400 h-1 z-10"></div>
+                <div className="w-10 sm:w-20 bg-indigo-400 h-1 z-10"></div>
                 :
-                <div className="w-20 bg-white dark:bg-slate-100  h-1 z-10"></div>
+                <div className="w-10 sm:w-20 bg-white dark:bg-slate-100  h-1 z-10"></div>
     }
     <div className="cursor-pointer bg-white dark:bg-slate-100 h-8 w-8 rounded-full shadow z-20 flex items-center justify-center">
       {
@@ -101,9 +101,9 @@ const Steps = () => {
     
           {
             maxStepCount > 2 ?
-                <div className="w-20 bg-indigo-400 h-1 z-10"></div>
+                <div className="w-10 sm:w-20 bg-indigo-400 h-1 z-10"></div>
                 :
-                <div className="w-20 bg-white dark:bg-slate-100  h-1 z-10"></div>
+                <div className="w-10 sm:w-20 bg-white dark:bg-slate-100  h-1 z-10"></div>
     }
     <div className="cursor-pointer bg-white dark:bg-slate-100 h-8 w-8 rounded-full shadow z-20 flex items-center justify-center">
       {
@@ -127,7 +127,7 @@ const Steps = () => {
     </div>
     
         </div>
-        <span className="ml-8 cursor-pointer" onClick={()=>{changeStepNumber(stepCount + 1)}}>
+        <span className="ml-4 sm:ml-8 cursor-pointer" onClick={()=>{changeStepNumber(stepCount + 1)}}>
           <ArrowForwardCircle title="forward" shake color="#FD8A8A"/>
         </span>
       </div>
