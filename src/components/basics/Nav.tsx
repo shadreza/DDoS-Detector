@@ -131,8 +131,8 @@ const Nav = () => {
 
           <ul className={`md:flex md:items-center md:pb-0 pb-12 absolute md:static md:mr-8 bg-white md:z-auto z-[-1] left-0 w-full md:w-auto md:pl-0 pl-6 transition-all duration-500 ease-in ${open ? 'top-20 ':'top-[-490px]'}`}>
             {
-              Links.map((link)=>(
-                <li key={link.name} className='md:ml-8 text-sm lg:text-xl md:my-0 my-7'>
+              Links.map((link, i)=>(
+                <li key={i} className='md:ml-8 text-sm lg:text-xl md:my-0 my-7'>
                   <Link onClick={toggleMenu} to={link.link} className='text-gray-800 hover:text-gray-400 duration-500'>
                     {
                       link.name === 'PROFILE' ? 

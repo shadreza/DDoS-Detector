@@ -1,8 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit'
-import impFeatureReducer from './features/importantFeatures'
-import loggedInUserReducer from './features/loggedInUser'
-import modalMessageReducer from './features/modalMessage'
-import screenOnMobileInfoReducer from './features/windowInfo'
+import { configureStore } from '@reduxjs/toolkit';
+import logger from 'redux-logger';
+import dataJsonReducer from './features/dataJson';
+import impFeatureReducer from './features/importantFeatures';
+import loggedInUserReducer from './features/loggedInUser';
+import modalMessageReducer from './features/modalMessage';
+import screenOnMobileInfoReducer from './features/windowInfo';
 
 export const store = configureStore({
   reducer: {
@@ -10,7 +12,9 @@ export const store = configureStore({
     modalMessageStore: modalMessageReducer,
     screenOnMobileInfoStore: screenOnMobileInfoReducer,
     impFeatureStore: impFeatureReducer,
+    dataStore: dataJsonReducer
   },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 })
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

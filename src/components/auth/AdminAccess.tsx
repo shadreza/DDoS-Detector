@@ -113,153 +113,162 @@ const AdminAccess = () => {
             <p className='text-sm mb-6'> <span className='font-bold text-orange-500'>{admins.length}</span> { admins.length === 1 ? 'admin is' : 'admins are' } present</p>
             <div className='bg-orange-100 pl-4 pr-4 rounded max-h-[50vh] overflow-y-auto'>
               {
-                admins.map(user => 
-                  <div key={user.email} className="mb-4 mt-4 border-2 border-orange-300 rounded">
+                admins.map((user, i) => 
+                  <div className='flex items-center'>
                     {
-                      (user && user.name && user.email && user.username && user.role && user.createdAt) && isScreenOnMobile === 'small' ?
-                        // mobile view
-                        <div  className='w-full mt-4 mb-4'>
-                          <div className='max-w-[90%] m-auto mb-2 mt-2 rounded p-2 bg-red-100 flex justify-between items-center'>
-                            <p className='uppercase text-sm font-bold'>Name : </p>
-                            <span className='text-indigo-700'>{user.name}</span>
-                          </div>
-                          <div className='max-w-[90%] m-auto mb-2 mt-2 rounded p-2 bg-violet-100 flex justify-between items-center'>
-                            <p className='uppercase text-sm font-bold'>Username : </p>
-                            <span className='text-indigo-700'>{user.username}</span>
-                          </div>
-                          <div className='max-w-[90%] m-auto mb-2 mt-2 rounded p-2 bg-red-100 flex justify-between items-center'>
-                            <p className='uppercase text-sm font-bold'>Email : </p>
-                            <span className='text-indigo-700'>{user.email}</span>
-                          </div>
-                          <div className='max-w-[90%] m-auto mb-2 mt-2 rounded p-2 bg-violet-100 flex justify-between items-center'>
-                            <p className='uppercase text-sm font-bold'>Role : </p>
-                            <span className='text-indigo-700'>{user.role}</span>
-                          </div>
-                          <div className='max-w-[90%] m-auto mb-2 mt-2 rounded p-2 bg-red-100 flex justify-between items-center'>
-                            <p className='uppercase text-sm font-bold'>Requested At : </p>
-                            <span className='text-indigo-700'>{getDateTime(user.createdAt)[0]}</span>
-                          </div>
-                          <div className='max-w-[90%] m-auto mb-2 mt-2 rounded p-2 bg-violet-100 flex justify-between items-center'>
-                            <p className='uppercase text-sm font-bold'>Requested Time : </p>
-                            <span className='text-indigo-700'>{getDateTime(user.createdAt)[1]}</span>
-                          </div>
-                        </div>
+                      i % 2 ?
+                        <span className='mr-4 font-bold text-xl md:text-4xl text-sky-400'>{ i + 1} </span>
                         :
-                        isScreenOnMobile === 'medium' ?
-                          // medium screen view
-                          <div className='p-2'>
-                            <div className='p-2 flex justify-between items-center'>
-                              <div className='mr-2 bg-red-100 p-2 rounded flex justify-between items-center w-full'>
-                                <p className='uppercase text-sm font-bold'>Name : </p>
-                                <span className='text-indigo-700'>{user.name}</span>
-                              </div>
-                              <div className='ml-2 bg-violet-100  p-2 rounded flex justify-between items-center w-full'>
-                                <p className='uppercase text-sm font-bold'>Username : </p>
-                                <span className='text-indigo-700'>{user.username}</span>
-                              </div>
+                        <span className='mr-4 font-bold text-xl md:text-4xl text-indigo-400'>{ i + 1 }</span>
+                    }
+                    <div key={i} className="w-full mb-4 mt-4 border-2 border-orange-300 rounded">
+                      {
+                        (user && user.name && user.email && user.username && user.role && user.createdAt) && isScreenOnMobile === 'small' ?
+                          // mobile view
+                          <div  className='w-full mt-4 mb-4'>
+                            <div className='max-w-[90%] m-auto mb-2 mt-2 rounded p-2 bg-red-100 flex justify-between items-center'>
+                              <p className='uppercase text-sm font-bold'>Name : </p>
+                              <span className='text-indigo-700'>{user.name}</span>
                             </div>
-                            <div className='p-2 flex justify-between items-center'>
-                              <div className='mr-2 bg-red-100 p-2 rounded flex justify-between items-center w-full'>
-                                <p className='uppercase text-sm font-bold'>Email : </p>
-                                <span className='text-indigo-700'>{user.email}</span>
-                              </div>
-                              <div className='ml-2 bg-violet-100  p-2 rounded flex justify-between items-center w-full'>
-                                <p className='uppercase text-sm font-bold'>Role : </p>
-                                <span className='text-indigo-700'>{user.role}</span>
-                              </div>
+                            <div className='max-w-[90%] m-auto mb-2 mt-2 rounded p-2 bg-violet-100 flex justify-between items-center'>
+                              <p className='uppercase text-sm font-bold'>Username : </p>
+                              <span className='text-indigo-700'>{user.username}</span>
                             </div>
-                            <div className='p-2 flex justify-between items-center'>
-                              <div className='mr-2 bg-red-100 p-2 rounded flex justify-between items-center w-full'>
-                                <p className='uppercase text-sm font-bold'>Requested At : </p>
-                                <span className='text-indigo-700'>{getDateTime(user.createdAt)[0]}</span>
-                              </div>
-                              <div className='ml-2 bg-violet-100  p-2 rounded flex justify-between items-center w-full'>
-                                <p className='uppercase text-sm font-bold'>Requested Time : </p>
-                                <span className='text-indigo-700'>{getDateTime(user.createdAt)[1]}</span>
-                              </div>
+                            <div className='max-w-[90%] m-auto mb-2 mt-2 rounded p-2 bg-red-100 flex justify-between items-center'>
+                              <p className='uppercase text-sm font-bold'>Email : </p>
+                              <span className='text-indigo-700'>{user.email}</span>
+                            </div>
+                            <div className='max-w-[90%] m-auto mb-2 mt-2 rounded p-2 bg-violet-100 flex justify-between items-center'>
+                              <p className='uppercase text-sm font-bold'>Role : </p>
+                              <span className='text-indigo-700'>{user.role}</span>
+                            </div>
+                            <div className='max-w-[90%] m-auto mb-2 mt-2 rounded p-2 bg-red-100 flex justify-between items-center'>
+                              <p className='uppercase text-sm font-bold'>Requested At : </p>
+                              <span className='text-indigo-700'>{getDateTime(user.createdAt)[0]}</span>
+                            </div>
+                            <div className='max-w-[90%] m-auto mb-2 mt-2 rounded p-2 bg-violet-100 flex justify-between items-center'>
+                              <p className='uppercase text-sm font-bold'>Requested Time : </p>
+                              <span className='text-indigo-700'>{getDateTime(user.createdAt)[1]}</span>
                             </div>
                           </div>
                           :
-                          isScreenOnMobile === 'large' ?
-                            // large screen view
+                          isScreenOnMobile === 'medium' ?
+                            // medium screen view
                             <div className='p-2'>
                               <div className='p-2 flex justify-between items-center'>
                                 <div className='mr-2 bg-red-100 p-2 rounded flex justify-between items-center w-full'>
                                   <p className='uppercase text-sm font-bold'>Name : </p>
                                   <span className='text-indigo-700'>{user.name}</span>
                                 </div>
-                                <div className='mr-2 bg-violet-100  p-2 rounded flex justify-between items-center w-full'>
+                                <div className='ml-2 bg-violet-100  p-2 rounded flex justify-between items-center w-full'>
                                   <p className='uppercase text-sm font-bold'>Username : </p>
                                   <span className='text-indigo-700'>{user.username}</span>
                                 </div>
-                                <div className='bg-red-100 p-2 rounded flex justify-between items-center w-full'>
+                              </div>
+                              <div className='p-2 flex justify-between items-center'>
+                                <div className='mr-2 bg-red-100 p-2 rounded flex justify-between items-center w-full'>
                                   <p className='uppercase text-sm font-bold'>Email : </p>
                                   <span className='text-indigo-700'>{user.email}</span>
                                 </div>
-                              </div>
-                              <div className='p-2 flex justify-between items-center'>
-                                <div className='mr-2 bg-violet-100  p-2 rounded flex justify-between items-center w-full'>
+                                <div className='ml-2 bg-violet-100  p-2 rounded flex justify-between items-center w-full'>
                                   <p className='uppercase text-sm font-bold'>Role : </p>
                                   <span className='text-indigo-700'>{user.role}</span>
                                 </div>
+                              </div>
+                              <div className='p-2 flex justify-between items-center'>
                                 <div className='mr-2 bg-red-100 p-2 rounded flex justify-between items-center w-full'>
                                   <p className='uppercase text-sm font-bold'>Requested At : </p>
                                   <span className='text-indigo-700'>{getDateTime(user.createdAt)[0]}</span>
                                 </div>
-                                <div className='bg-violet-100  p-2 rounded flex justify-between items-center w-full'>
+                                <div className='ml-2 bg-violet-100  p-2 rounded flex justify-between items-center w-full'>
                                   <p className='uppercase text-sm font-bold'>Requested Time : </p>
                                   <span className='text-indigo-700'>{getDateTime(user.createdAt)[1]}</span>
                                 </div>
                               </div>
                             </div>
                             :
-                            <div></div>
-                    }
-                      {
-                        user.role === 'admin' && isMaster ?
-                          <div className='text-center mb-4'>
-                            <div className='flex justify-center items-center'>
-                              <span
-                                className='cursor-pointer mr-8 flex items-center hover:bg-violet-200 p-2 rounded'
-                                onClick={()=>alterAdminPrivilage(user.id, 'registered')}
-                              >
-                                <span className='mr-4 text-sm font-bold lowercase'>dethrone as admin</span>
-                                <ThumbsDown
-                                  color={'#1aa7ec'} 
-                                  title="dethrone-admin"
-                                  height='28px'
-                                  width='28px'
-                                />
-                              </span>
-                            <span
-                                className='cursor-pointer mr-8 flex items-center hover:bg-orange-200 p-2 rounded'
-                                onClick={()=>alterAdminPrivilage(user.id, 'master')}
-                              >
-                                <span className='mr-4 text-sm font-bold lowercase'>make master</span>
-                                <Barbell
-                                  color={'#ff781f'} 
-                                  title="make-master"
-                                  height='28px'
-                                  width='28px'
-                                />
-                              </span>
-                              <span
-                                className='cursor-pointer mr-8 flex items-center hover:bg-rose-200 p-2 rounded'
-                                onClick={()=>deleteAdmin(user.id)}
-                              >
-                                <Trash
-                                  color={'#e63b60'} 
-                                  title="delete-user"
-                                  height='28px'
-                                  width='28px'
-                                />
-                                <span className='ml-4 text-sm font-bold lowercase'>Remove user</span>
-                              </span>
-                            </div>
-                          </div>
-                          :
-                          <></>
+                            isScreenOnMobile === 'large' ?
+                              // large screen view
+                              <div className='p-2'>
+                                <div className='p-2 flex justify-between items-center'>
+                                  <div className='mr-2 bg-red-100 p-2 rounded flex justify-between items-center w-full'>
+                                    <p className='uppercase text-sm font-bold'>Name : </p>
+                                    <span className='text-indigo-700'>{user.name}</span>
+                                  </div>
+                                  <div className='mr-2 bg-violet-100  p-2 rounded flex justify-between items-center w-full'>
+                                    <p className='uppercase text-sm font-bold'>Username : </p>
+                                    <span className='text-indigo-700'>{user.username}</span>
+                                  </div>
+                                  <div className='bg-red-100 p-2 rounded flex justify-between items-center w-full'>
+                                    <p className='uppercase text-sm font-bold'>Email : </p>
+                                    <span className='text-indigo-700'>{user.email}</span>
+                                  </div>
+                                </div>
+                                <div className='p-2 flex justify-between items-center'>
+                                  <div className='mr-2 bg-violet-100  p-2 rounded flex justify-between items-center w-full'>
+                                    <p className='uppercase text-sm font-bold'>Role : </p>
+                                    <span className='text-indigo-700'>{user.role}</span>
+                                  </div>
+                                  <div className='mr-2 bg-red-100 p-2 rounded flex justify-between items-center w-full'>
+                                    <p className='uppercase text-sm font-bold'>Requested At : </p>
+                                    <span className='text-indigo-700'>{getDateTime(user.createdAt)[0]}</span>
+                                  </div>
+                                  <div className='bg-violet-100  p-2 rounded flex justify-between items-center w-full'>
+                                    <p className='uppercase text-sm font-bold'>Requested Time : </p>
+                                    <span className='text-indigo-700'>{getDateTime(user.createdAt)[1]}</span>
+                                  </div>
+                                </div>
+                              </div>
+                              :
+                              <div></div>
+                        
                       }
+                        {
+                          user.role === 'admin' && isMaster ?
+                            <div className='text-center mb-4'>
+                              <div className='flex justify-center items-center'>
+                                <span
+                                  className='cursor-pointer mr-8 flex items-center hover:bg-violet-200 p-2 rounded'
+                                  onClick={()=>alterAdminPrivilage(user.id, 'registered')}
+                                >
+                                  <span className='mr-4 text-sm font-bold lowercase'>dethrone as admin</span>
+                                  <ThumbsDown
+                                    color={'#1aa7ec'} 
+                                    title="dethrone-admin"
+                                    height='28px'
+                                    width='28px'
+                                  />
+                                </span>
+                              <span
+                                  className='cursor-pointer mr-8 flex items-center hover:bg-orange-200 p-2 rounded'
+                                  onClick={()=>alterAdminPrivilage(user.id, 'master')}
+                                >
+                                  <span className='mr-4 text-sm font-bold lowercase'>make master</span>
+                                  <Barbell
+                                    color={'#ff781f'} 
+                                    title="make-master"
+                                    height='28px'
+                                    width='28px'
+                                  />
+                                </span>
+                                <span
+                                  className='cursor-pointer mr-8 flex items-center hover:bg-rose-200 p-2 rounded'
+                                  onClick={()=>deleteAdmin(user.id)}
+                                >
+                                  <Trash
+                                    color={'#e63b60'} 
+                                    title="delete-user"
+                                    height='28px'
+                                    width='28px'
+                                  />
+                                  <span className='ml-4 text-sm font-bold lowercase'>Remove user</span>
+                                </span>
+                              </div>
+                            </div>
+                            :
+                            <></>
+                        }
+                    </div>
                   </div>
                 )
               }
