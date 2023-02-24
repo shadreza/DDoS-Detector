@@ -5,7 +5,8 @@ import { RootState } from '../../redux/store';
 
 const UploadCsv = () => {
   const dispatch = useDispatch();
-  const {dataJson} = useSelector((state: RootState) => state.dataStore)
+  const { dataJson } = useSelector((state: RootState) => state.dataStore)
+  
 
   const [csvFile, setCsvFile] = useState<File>(new File([], ''))
 
@@ -101,6 +102,9 @@ const UploadCsv = () => {
   }
   return (
     <div>
+      <p>Upload Csv</p>
+      
+      
       <input
         type="file"
         accept= ".csv"

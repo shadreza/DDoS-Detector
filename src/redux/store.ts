@@ -5,6 +5,7 @@ import impFeatureReducer from './features/importantFeatures';
 import loggedInUserReducer from './features/loggedInUser';
 import modalMessageReducer from './features/modalMessage';
 import screenOnMobileInfoReducer from './features/windowInfo';
+import instructionInfoReducer from './features/instructionInfo';
 
 export const store = configureStore({
   reducer: {
@@ -12,7 +13,8 @@ export const store = configureStore({
     modalMessageStore: modalMessageReducer,
     screenOnMobileInfoStore: screenOnMobileInfoReducer,
     impFeatureStore: impFeatureReducer,
-    dataStore: dataJsonReducer
+    dataStore: dataJsonReducer,
+    instructionInfoStore: instructionInfoReducer
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 })

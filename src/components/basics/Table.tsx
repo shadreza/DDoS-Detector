@@ -1,10 +1,12 @@
+import { useState } from "react"
 import { useSelector } from "react-redux"
 import { RootState } from "../../redux/store"
 
 const Table = () => {
-  const { impFeatureSet } = useSelector((state: RootState) => state.impFeatureStore)
   const { dataJson, headers } = useSelector((state: RootState) => state.dataStore)
-  console.log(dataJson)
+
+  const [paginatedDataArray, setPaginatedDataArray] = useState<any[]>([])
+
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -26,7 +28,7 @@ const Table = () => {
                 {
                   headers.map((headerName, i) => 
                     i === 0 ?
-                      <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                      <th key={i} scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                          {data[headerName]}
                       </th>
                       :
