@@ -156,15 +156,20 @@ const UploadCsv = () => {
             </div>
           
             <div className='mt-2 m-auto max-w-lg p-4 rounded-xl bg-[#FFE7CC] flex justify-around items-center'>
-              <button
-                onClick={(e) => {
-                  e.preventDefault()
-                  if(csvFile) uploadCsvFile()
-                }}
-                className="bg-emerald-100 p-2 shadow-2xl rounded-xl hover:shadow-xl hover:text-indigo-400 font-bold"
-              >
-                Process File
-              </button>
+              {
+                fileInfo && fileInfo.name && fileInfo.size ?
+                  <></>
+                  :
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault()
+                      if(csvFile) uploadCsvFile()
+                    }}
+                    className="bg-emerald-100 p-2 shadow-2xl rounded-xl hover:shadow-xl hover:text-indigo-400 font-bold"
+                  >
+                    Process File
+                  </button>
+              }
               <button
                 onClick={(e) => {
                   e.preventDefault()

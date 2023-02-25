@@ -10,7 +10,6 @@ const Table = () => {
   const { dataJson, headers } = useSelector((state: RootState) => state.dataStore)
   const dispatch = useDispatch();
 
-  
   const [tmpDataJson, setTempDataJson] = useState<any[]>(dataJson)
   const [isTableReady, setIsTableReady] = useState(false)
   const [tableJson, setTableJson] = useState<any[]>([])
