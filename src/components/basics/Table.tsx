@@ -56,18 +56,12 @@ const Table = () => {
     setTableJson(totalTempArray)
     setTotaPages(totalTempArray.length)
     setIsTableReady(true)
-    setRowsPerPage(rowsPerPage+1)
-    setRowsPerPage(rowsPerPage-1)
   }
-
-  useEffect(() => {
-    readyTheData()
-  }, [])
   
   useEffect(() => {
     readyTheData()
     getTableJsonFormatted()
-  }, [dataJson, rowsPerPage])
+  }, [dataJson, tmpDataJson, rowsPerPage])
 
 
 
