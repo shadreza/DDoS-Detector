@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const instructions = [
   "Upload a CSV file first -> Press Process Button",
-  "Check your CSV file that is now in the table -> Press Predict Button",
+  "Check your CSV file that is now in the table -> Press Proceed Button",
   "Choose correct options -> Press Run Model",
   "Your Results are shown."
 ]
