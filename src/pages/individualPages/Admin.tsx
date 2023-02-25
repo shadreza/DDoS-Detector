@@ -12,8 +12,8 @@ const Admin = () => {
   const navigate = useNavigate();
 
   const adminSettingOptions = [
-    {name: "Register User", link: "/admin/register/users"},
-    {name: "User Access", link: "/admin/access/users"},
+    {name: "Registered User", link: "/admin/register/users"},
+    {name: "Special User Access", link: "/admin/access/users"},
     {name: "Admin Access", link: "/admin/access/admins"},
   ]
 

@@ -109,7 +109,7 @@ const Login = () => {
                 const modalMessage = "Login Unsuccessfull... There maybe some issues with the connection"
                 dispatch(setMessageForModal([modalTitle, modalMessage]))
                 dispatch(setShowModal(true))
-                leaveThePage('/', 2, true)
+                leaveThePage('/login', 2, true)
               }
             }
           })
@@ -129,14 +129,14 @@ const Login = () => {
                 const modalMessage = "You are not registered yet"
                 dispatch(setMessageForModal([modalTitle, modalMessage]))
                 dispatch(setShowModal(true))
-                leaveThePage('/', 2, true)
+                leaveThePage('/login', 2, true)
       }
     }).catch(() => {
       const modalTitle = "Failed"
                 const modalMessage = "Login Unsuccessfull... There maybe some issues with the connection"
                 dispatch(setMessageForModal([modalTitle, modalMessage]))
                 dispatch(setShowModal(true))
-                leaveThePage('/', 2, true)
+                leaveThePage('/login', 2, true)
     })
   }
 

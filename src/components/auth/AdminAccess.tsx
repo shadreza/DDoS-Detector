@@ -1,4 +1,3 @@
-import { deleteUser } from 'firebase/auth'
 import { useEffect, useState } from 'react'
 import { Barbell, ThumbsDown, Trash } from 'react-ionicons'
 import { useDispatch, useSelector } from 'react-redux'
@@ -86,32 +85,30 @@ const AdminAccess = () => {
 
   const deleteAdmin = async (userId: string, userEmail:string ="") => {
     const collectionName = "users"
-    try {
-      await searchOneIntoFirebase(collectionName, { email: userEmail }, ['email'], true).then(res => {
-        const user = res[2]
-        deleteUser(user).then(async () => {
-          const result = await deleteDocument(collectionName, userId)
-          if (result) {
-            dispatch(setMessageForModal(["Success", "Admin deleted from our database"]))
-            dispatch(setShowModal(true))
-            clearModalWithinSec(3)
-            setDocumentToggler(!documentToggler)
-          } else {
+      await searchOneIntoFirebase(collectionName, { email: userEmail }, ['email'], true).then(async res => {
+          await deleteDocument(collectionName, userId).then((result) => {
+            if (result) {
+              dispatch(setMessageForModal(["Success", "Admin deleted from our database"]))
+              dispatch(setShowModal(true))
+              clearModalWithinSec(3)
+              setDocumentToggler(!documentToggler)
+            } else {
+              alert('else')
+              dispatch(setMessageForModal(["Failed", "Admin deleteion could not be done... Please try again later"]))
+              dispatch(setShowModal(true))
+              clearModalWithinSec(3)
+            }
+          }).catch(() => {
+            alert('catch')
             dispatch(setMessageForModal(["Failed", "Admin deleteion could not be done... Please try again later"]))
             dispatch(setShowModal(true))
             clearModalWithinSec(3)
-          }
-        }).catch((error) => {
-          dispatch(setMessageForModal(["Failed", "Admin deleteion could not be done... Please try again later"]))
-            dispatch(setShowModal(true))
-            clearModalWithinSec(3)
-        });
+          })
+      }).catch(() => {
+        dispatch(setMessageForModal(["Failed", "User not found... "]))
+        dispatch(setShowModal(true))
+        clearModalWithinSec(3)
       })
-    } catch {
-      dispatch(setMessageForModal(["Failed", "Admin deleteion could not be done... Please try again later"]))
-            dispatch(setShowModal(true))
-            clearModalWithinSec(3)
-    }
   }
 
   useEffect(() => {

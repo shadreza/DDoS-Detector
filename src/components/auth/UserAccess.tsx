@@ -104,7 +104,7 @@ const UserAccess = () => {
       {
         registeredUsers[0] !== null ?
           <div className='bg-sky-100 rounded p-4'>
-            <p className='font-bold tracking-widest mb-2'>Registered Users Access Room</p>
+            <p className='font-bold tracking-widest mb-2'>Registered Special Users Access Room</p>
             <p className='text-sm mb-6'> <span className='font-bold text-orange-500'>{registeredUsers.length}</span> registered { registeredUsers.length === 1 ? 'user has' : 'users have' } access of using the site</p>
             <div className='bg-orange-100 pl-4 pr-4 rounded max-h-[50vh] overflow-y-auto'>
               {

@@ -88,7 +88,7 @@ const AdminUserRegister = () => {
       {
         allUsers[0] !== null ?
           <div className='bg-sky-100 rounded p-4'>
-            <p className='font-bold tracking-widest mb-2'>Register Users Control Room</p>
+            <p className='font-bold tracking-widest mb-2'>Interested Users Control Room</p>
             <p className='text-sm mb-6'> <span className='font-bold text-orange-500'>{allUsers.length}</span> { allUsers.length === 1 ? 'user is' : 'users are' } waiting for <span className='uppercase font-bold text-red-500'>your approval</span> to use the site</p>
             <div className='bg-orange-100 pl-4 pr-4 rounded max-h-[50vh] overflow-y-auto'>
               {
