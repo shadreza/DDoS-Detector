@@ -151,12 +151,13 @@ const Table = () => {
               </table>
             </div>
 
-            <div className="flex justify-center items-center mt-4 max-w-fit m-auto">
+            <div className="flex-reverse sm:flex justify-center items-center mt-4 max-w-fit m-auto">
+
               <div className="max-w-full sm:max-w-fit bg-slate-200 p-2 rounded-xl m-auto flex justify-center items-center">
-                <span className="ml-4 mr-4 sm:ml-6 sm:mr-6 hover:bg-rose-300 rounded-full cursor-pointer">
+                <span className="ml-2 mr-2 sm:ml-6 sm:mr-6 hover:bg-rose-300 rounded-full cursor-pointer">
                   <PlayBackCircleOutline  onClick={()=>{changePage(0)}}  shake/>
                 </span>
-                <span className="ml-4 mr-4 sm:ml-6 sm:mr-6 hover:bg-green-300 rounded-full cursor-pointer">
+                <span className="ml-2 mr-2 sm:ml-6 sm:mr-6 hover:bg-green-300 rounded-full cursor-pointer">
                   <CaretBackCircleOutline  onClick={()=>{changePage(page-1)}} />
                 </span>
                 <span className="ml-2 mr-2 sm:ml-6 sm:mr-6 cursor-pointer flex items-center">
@@ -165,14 +166,15 @@ const Table = () => {
                   <span className="mr-1 ml-1">of</span>
                   <span className="mr-1 ml-1 flex items-center"> {totalPages}</span>
                 </span>
-                <span className="ml-4 mr-4 sm:ml-6 sm:mr-6 cursor-pointer hover:bg-green-300 rounded-full">
+                <span className="ml-2 mr-2 sm:ml-6 sm:mr-6 cursor-pointer hover:bg-green-300 rounded-full">
                   <PlayCircleOutline  onClick={()=>{changePage(page+1)}} />
                 </span>
-                <span className="ml-4 mr-4 sm:ml-6 sm:mr-6 hover:bg-rose-300 rounded-full cursor-pointer">
+                <span className="ml-2 mr-2 sm:ml-6 sm:mr-6 hover:bg-rose-300 rounded-full cursor-pointer">
                   <PlayForwardCircleOutline onClick={()=>{changePage(totalPages)}} shake/>
                 </span>
               </div>
-              <div>
+
+              <div className="max-w-fit m-auto mt-2 sm:mt-0">
                 <span className="ml-2  cursor-pointer flex items-center bg-slate-200 p-2 rounded-xl">
                   <span className="mr-1 ml-1">Rows Per Page</span>
                   <input className="w-14 mr-1 ml-1 rounded text-center" type="number" value={rowsPerPage} onChange={e => {handleChangeRowsPerPage(e)}} />
@@ -181,7 +183,7 @@ const Table = () => {
             </div>
 
 
-            <div className="mt-4 text-center p-2 w-fit hover:bg-blue-200 bg-rose-200 rounded-xl flex justify-center items-center m-auto cursor-pointer" onClick={proceedToModelComponent} >
+            <div className=" mt-2 sm:mt-4 text-center p-2 w-fit hover:bg-blue-200 bg-rose-200 rounded-xl flex justify-center items-center m-auto cursor-pointer" onClick={proceedToModelComponent} >
               <span className="p-1 font-bold">
                 Proceed
               </span>
