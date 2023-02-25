@@ -52,14 +52,17 @@ const Login = () => {
     return errMsg
   }
 
-  const isValidated = () => {
+  const isValidated = async () => {
+    let res = false
     if (typedEmail.trim().length > 0) {
       setErrorEmail("")
       if ((/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w+)+$/.test(typedEmail))) { 
         setErrorEmail("")
         if (typedPassword.trim().length > 0) { 
           setErrorPassword("")
-          return true;
+          await searchOneIntoFirebase('users', { email: typedEmail }, ['email']).then(result => {
+            res =  result[0]
+          })
         } else {
           setErrorPassword("Enter Password")
         }
@@ -69,6 +72,7 @@ const Login = () => {
     } else {
       setErrorEmail("Email can not be empty");
     }
+    return res
   }
 
   const leaveThePage = (route: string, timeInSec: number, leaveIt: boolean) => {
@@ -82,44 +86,58 @@ const Login = () => {
   } 
 
   const loginWithCreds = async () => {
-    if (isValidated()) {
-      try {
-        await signInWithEmailAndPassword(
-          auth,
-          typedEmail,
-          typedPassword
-        ).then(async res => {
-          const userInfo = res.user
-          const gottenEmail = userInfo.email
-          if (gottenEmail) {
-            if ((/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w+)+$/.test(gottenEmail))) {
-              changeAuthState(gottenEmail)
-              const modalTitle = "Success"
-              const modalMessage = "Login Successfull"
-              dispatch(setMessageForModal([modalTitle, modalMessage]))
-              dispatch(setShowModal(true))
-              leaveThePage('/', 2, true)
-            } else {
-              const modalTitle = "Failed"
-              const modalMessage = "Login Unsuccessfull... There maybe some issues with the connection"
-              dispatch(setMessageForModal([modalTitle, modalMessage]))
-              dispatch(setShowModal(true))
-              leaveThePage('/', 3, true)
+    await isValidated().then(async (res) => {
+      if (res) {
+        try {
+          await signInWithEmailAndPassword(
+            auth,
+            typedEmail,
+            typedPassword
+          ).then(async res => {
+            const userInfo = res.user
+            const gottenEmail = userInfo.email
+            if (gottenEmail) {
+              if ((/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w+)+$/.test(gottenEmail))) {
+                changeAuthState(gottenEmail)
+                const modalTitle = "Success"
+                const modalMessage = "Login Successfull"
+                dispatch(setMessageForModal([modalTitle, modalMessage]))
+                dispatch(setShowModal(true))
+                leaveThePage('/', 2, true)
+              } else {
+                const modalTitle = "Failed"
+                const modalMessage = "Login Unsuccessfull... There maybe some issues with the connection"
+                dispatch(setMessageForModal([modalTitle, modalMessage]))
+                dispatch(setShowModal(true))
+                leaveThePage('/', 2, true)
+              }
             }
-          }
-        })
-          .catch(err => {
-          const modalTitle = "Failure"
-          const errMsg = getTheTrueErrMessage(err.message)
-          dispatch(setMessageForModal([modalTitle, errMsg.toUpperCase()]))
-          dispatch(setShowModal(true))
-          leaveThePage('/login', 3, false)
-        })
-      } catch (err) {
-        dispatch(clearloggedInUserJson())
+          })
+            .catch(err => {
+            const modalTitle = "Failure"
+            const errMsg = getTheTrueErrMessage(err.message)
+            dispatch(setMessageForModal([modalTitle, errMsg.toUpperCase()]))
+            dispatch(setShowModal(true))
+            leaveThePage('/login', 2, false)
+          })
+        } catch (err) {
+          dispatch(clearloggedInUserJson())
 
+        }
+      } else {
+        const modalTitle = "Failed"
+                const modalMessage = "You are not registered yet"
+                dispatch(setMessageForModal([modalTitle, modalMessage]))
+                dispatch(setShowModal(true))
+                leaveThePage('/', 2, true)
       }
-    }
+    }).catch(() => {
+      const modalTitle = "Failed"
+                const modalMessage = "Login Unsuccessfull... There maybe some issues with the connection"
+                dispatch(setMessageForModal([modalTitle, modalMessage]))
+                dispatch(setShowModal(true))
+                leaveThePage('/', 2, true)
+    })
   }
 
   return (

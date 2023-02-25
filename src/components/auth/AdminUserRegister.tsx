@@ -3,7 +3,6 @@ import { PersonAdd, Trash } from 'react-ionicons'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteDocument } from '../../functions/auth/firebase.deleteDocument'
 import { readAllCertainData } from '../../functions/auth/firebase.readAllCertainData'
-import { registerUser } from '../../functions/auth/firebase.registerUser'
 import { updateDocumnet } from '../../functions/auth/firebase.updateDocument'
 import { getDateTime } from '../../functions/formatter/format.user'
 import { UserInterface } from '../../interfaces/user'
@@ -50,21 +49,14 @@ const AdminUserRegister = () => {
   const permitUser = async (user:UserInterface, userId: string) => {
     const updatedRole = { "role": "registered" }
     const collectionName = "users"
-    const createdUserResult = await registerUser(user)
-    if (createdUserResult) {
-      const result = await updateDocumnet(collectionName, userId, updatedRole)
-      if (result) {
-        dispatch(setMessageForModal(["Success", "User can now use the siite... Registered"]))
-        dispatch(setShowModal(true))
-        clearModalWithinSec(3)
-        setDocumentToggler(!documentToggler)
-      } else {
-        dispatch(setMessageForModal(["Failed", "Users permission could not be changed... Please try again later"]))
-        dispatch(setShowModal(true))
-        clearModalWithinSec(3)
-      }
+    const result = await updateDocumnet(collectionName, userId, updatedRole)
+    if (result) {
+      dispatch(setMessageForModal(["Success", "Users data will now be stored in database."]))
+      dispatch(setShowModal(true))
+      clearModalWithinSec(3)
+      setDocumentToggler(!documentToggler)
     } else {
-      dispatch(setMessageForModal(["Failed", "Users could not be created... Please try again later"]))
+      dispatch(setMessageForModal(["Failed", "Users permission could not be changed... Please try again later"]))
       dispatch(setShowModal(true))
       clearModalWithinSec(3)
     }
@@ -101,14 +93,14 @@ const AdminUserRegister = () => {
             <div className='bg-orange-100 pl-4 pr-4 rounded max-h-[50vh] overflow-y-auto'>
               {
                 allUsers.map((user,i) => 
-                  <div className='flex items-center'>
+                  <div key={i} className='flex items-center'>
                     {
                       i % 2 ?
                         <span className='mr-4 font-bold text-xl md:text-4xl text-sky-400'>{ i + 1} </span>
                         :
                         <span className='mr-4 font-bold text-xl md:text-4xl text-indigo-400'>{ i + 1 }</span>
                     }
-                    <div key={i} className="w-full mb-4 mt-4 border-2 border-orange-300 rounded">
+                    <div className="w-full mb-4 mt-4 border-2 border-orange-300 rounded">
                       {
                         (user && user.name && user.email && user.username && user.role && user.createdAt) && isScreenOnMobile === 'small' ?
                           // mobile view
@@ -215,7 +207,7 @@ const AdminUserRegister = () => {
                             className='cursor-pointer mr-8 flex items-center hover:bg-green-200 p-2 rounded'
                             onClick={()=>permitUser(user, user.id)}
                           >
-                            <span className='mr-4 text-sm font-bold lowercase'>Permit</span>
+                            <span className='mr-4 text-sm font-bold lowercase'>Add to Special</span>
                             <PersonAdd
                               color={'#1aa7ec'} 
                               title="edit-user"

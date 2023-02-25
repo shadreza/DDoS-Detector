@@ -2,17 +2,19 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebase.config';
 import { UserInterface } from '../../interfaces/user';
 export const registerUser = async (passedUser: UserInterface) => {
+  let result = false
   try {
     await createUserWithEmailAndPassword(
       auth,
       passedUser.email,
       passedUser.password
     ).then(res => {
-      return true
+      result = true
     }).catch(err => { 
-      return false
+      result = false
     })
   } catch (err) {
-    return false
+    result = false
   }
+  return result
 } 

@@ -2,13 +2,22 @@ import { addDoc, collection } from 'firebase/firestore';
 import { db } from '../../firebase.config';
 export const insertIntoFirebase = async (collectionName:string, data:Object) => {
   const collectionRef = collection(db, collectionName)
+  let res = {}
+  let msg = "err"
   try {
-    const result = await addDoc(
+    await addDoc(
       collectionRef,
       data
-    )
-    return ["ok", result]
+    ).then((result) => {
+      res = result
+      msg = "ok"
+    }).catch((err) => {
+      res = err
+      msg = "err"
+    })
   } catch (err) {
-    return ["err", err]
+    res = {}
+    msg = "err"
   }
+  return [msg, res]
 }  

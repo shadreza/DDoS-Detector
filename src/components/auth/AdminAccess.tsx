@@ -1,8 +1,10 @@
+import { deleteUser } from 'firebase/auth'
 import { useEffect, useState } from 'react'
 import { Barbell, ThumbsDown, Trash } from 'react-ionicons'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteDocument } from '../../functions/auth/firebase.deleteDocument'
 import { readAllCertainData } from '../../functions/auth/firebase.readAllCertainData'
+import { searchOneIntoFirebase } from '../../functions/auth/firebase.search'
 import { updateDocumnet } from '../../functions/auth/firebase.updateDocument'
 import { checkAdminState } from '../../functions/checks/security.checkAdmin'
 import { getDateTime } from '../../functions/formatter/format.user'
@@ -80,18 +82,35 @@ const AdminAccess = () => {
     }
   }
 
-  const deleteAdmin = async (userId: string) => {
+  
+
+  const deleteAdmin = async (userId: string, userEmail:string ="") => {
     const collectionName = "users"
-    const result = await deleteDocument(collectionName, userId)
-    if (result) {
-      dispatch(setMessageForModal(["Success", "Admin deleted from our database"]))
-      dispatch(setShowModal(true))
-      clearModalWithinSec(3)
-      setDocumentToggler(!documentToggler)
-    } else {
+    try {
+      await searchOneIntoFirebase(collectionName, { email: userEmail }, ['email'], true).then(res => {
+        const user = res[2]
+        deleteUser(user).then(async () => {
+          const result = await deleteDocument(collectionName, userId)
+          if (result) {
+            dispatch(setMessageForModal(["Success", "Admin deleted from our database"]))
+            dispatch(setShowModal(true))
+            clearModalWithinSec(3)
+            setDocumentToggler(!documentToggler)
+          } else {
+            dispatch(setMessageForModal(["Failed", "Admin deleteion could not be done... Please try again later"]))
+            dispatch(setShowModal(true))
+            clearModalWithinSec(3)
+          }
+        }).catch((error) => {
+          dispatch(setMessageForModal(["Failed", "Admin deleteion could not be done... Please try again later"]))
+            dispatch(setShowModal(true))
+            clearModalWithinSec(3)
+        });
+      })
+    } catch {
       dispatch(setMessageForModal(["Failed", "Admin deleteion could not be done... Please try again later"]))
-      dispatch(setShowModal(true))
-      clearModalWithinSec(3)
+            dispatch(setShowModal(true))
+            clearModalWithinSec(3)
     }
   }
 
@@ -114,14 +133,14 @@ const AdminAccess = () => {
             <div className='bg-orange-100 pl-4 pr-4 rounded max-h-[50vh] overflow-y-auto'>
               {
                 admins.map((user, i) => 
-                  <div className='flex items-center'>
+                  <div key={i} className='flex items-center'>
                     {
                       i % 2 ?
                         <span className='mr-4 font-bold text-xl md:text-4xl text-sky-400'>{ i + 1} </span>
                         :
                         <span className='mr-4 font-bold text-xl md:text-4xl text-indigo-400'>{ i + 1 }</span>
                     }
-                    <div key={i} className="w-full mb-4 mt-4 border-2 border-orange-300 rounded">
+                    <div className="w-full mb-4 mt-4 border-2 border-orange-300 rounded">
                       {
                         (user && user.name && user.email && user.username && user.role && user.createdAt) && isScreenOnMobile === 'small' ?
                           // mobile view
@@ -253,7 +272,7 @@ const AdminAccess = () => {
                                 </span>
                                 <span
                                   className='cursor-pointer mr-8 flex items-center hover:bg-rose-200 p-2 rounded'
-                                  onClick={()=>deleteAdmin(user.id)}
+                                  onClick={()=>deleteAdmin(user.id, user.email)}
                                 >
                                   <Trash
                                     color={'#e63b60'} 

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { insertIntoFirebase } from '../../functions/auth/firebase.create';
+import { registerUser } from "../../functions/auth/firebase.registerUser";
 import { searchOneIntoFirebase } from '../../functions/auth/firebase.search';
 import { UserInterface } from '../../interfaces/user';
 import { clearMessageForModal, setMessageForModal, setShowModal } from '../../redux/features/modalMessage';
@@ -16,6 +17,13 @@ const Register = () => {
       navigate("/", { replace: true })
     }
   }, [loggedInUserJson])
+
+  const clearModalWithinSec = (timeInSec:number) => {
+    setTimeout(() => {
+      dispatch(clearMessageForModal())
+      dispatch(setShowModal(false))
+    }, timeInSec*1000);
+  }
 
   const [typedName, setTypedName] = useState<string>("")
   const [typedUsername, setTypedUsername] = useState<string>("")
@@ -55,7 +63,7 @@ const Register = () => {
               if (typedPassword.trim().length >= 8) {
                 setPasswordError("")
                 setAnyOtherError(false)
-                if (typedRePassword.trim().length > 0 === typedPassword.trim().length > 0) {
+                if (typedRePassword.trim() === typedPassword.trim()) {
 
                   // datas of the form are valid by form validation
                   setRe_passwordError("")
@@ -138,29 +146,45 @@ const Register = () => {
   const createUserWithCreds = async () => {
     const validationMetric = await isValidated()
     if (validationMetric) {
-        const interestedUser = {
-          name: typedName,
-          username: typedUsername,
-          email: typedEmail,
-          password: typedPassword,
-          role: 'interested',
-          createdAt: new Date(),
-          updatedAt: new Date()
-        }
-        const res = await insertIntoFirebase(collectionName, interestedUser)
-      if (res[0] === 'ok') {  
-          resetTheStates()
-          dispatch(setMessageForModal(["Almost there !", "Registration Done... You're request has been accepted... Almost there to use the app. The Admin will be taking you onboard soon!"]))
-          dispatch(setShowModal(true))
-          setAnyOtherError(false)
-          setDataError("")
-          leaveThePage('/', 5)
-          
+      const interestedUser = {
+        name: typedName,
+        username: typedUsername,
+        email: typedEmail,
+        password: typedPassword,
+        role: 'interested',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+      await registerUser(interestedUser).then(async createdUserResult => {
+        if (createdUserResult) { 
+          await insertIntoFirebase(collectionName, interestedUser).then(res => {  
+            if (res[0] === 'ok') {  
+                resetTheStates()
+                dispatch(setMessageForModal(["Registration Completed", "You can use the site now"]))
+                dispatch(setShowModal(true))
+                setAnyOtherError(false)
+                setDataError("")
+                leaveThePage('/', 2)
+            } else {
+              dispatch(setMessageForModal(["Failed", "Users could not be created... Please try again later"]))
+              dispatch(setShowModal(true))
+              clearModalWithinSec(3)
+            }
+          }).catch(() => {
+            if (dataError.trim().length === 0) {
+                setDataError("There were some issues creating the account. Please try again")
+              }
+          })
         } else {
-          if (dataError.trim().length === 0) {
-            setDataError("There were some issues creating the account. Please try again")
-          }
+          dispatch(setMessageForModal(["Failed", "You were deleted from the site"]))
+              dispatch(setShowModal(true))
+              clearModalWithinSec(3)
         }
+      }).catch(() => {
+        dispatch(setMessageForModal(["Failed", "Users could not be created... Please try again later"]))
+        dispatch(setShowModal(true))
+        clearModalWithinSec(3)
+      })
     }
   }  
 

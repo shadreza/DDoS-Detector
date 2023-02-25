@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Settings, Trash } from 'react-ionicons'
+import { ArrowUndo, Settings, Trash } from 'react-ionicons'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteDocument } from '../../functions/auth/firebase.deleteDocument'
 import { readAllCertainData } from '../../functions/auth/firebase.readAllCertainData'
@@ -23,6 +23,23 @@ const UserAccess = () => {
       dispatch(clearMessageForModal())
       dispatch(setShowModal(false))
     }, timeInSec*1000);
+  }
+
+  const removeFromSpecialList = async (userId: string) => {
+    const role = "interested"
+    const updatedRole = { "role": role }
+    const collectionName = "users"
+    const result = await updateDocumnet(collectionName, userId, updatedRole)
+    if (result) {
+      dispatch(setMessageForModal(["Success", "User Privilage Updated to" + role.toUpperCase() ]))
+      dispatch(setShowModal(true))
+      clearModalWithinSec(3)
+      setDocumentToggler(!documentToggler)
+    } else {
+      dispatch(setMessageForModal(["Failed", "Users Privilage could not be changed... Please try again later"]))
+      dispatch(setShowModal(true))
+      clearModalWithinSec(3)
+    }
   }
 
   const getAllRegisteredUsers = async () => {
@@ -92,14 +109,14 @@ const UserAccess = () => {
             <div className='bg-orange-100 pl-4 pr-4 rounded max-h-[50vh] overflow-y-auto'>
               {
                 registeredUsers.map((user,i) =>  
-                  <div className='flex items-center'>
+                  <div key={i} className='flex items-center'>
                     {
                       i % 2 ?
                         <span className='mr-4 font-bold text-xl md:text-4xl text-sky-400'>{ i + 1} </span>
                         :
                         <span className='mr-4 font-bold text-xl md:text-4xl text-indigo-400'>{ i + 1 }</span>
                     }
-                    <div key={i} className="w-full mb-4 mt-4 border-2 border-orange-300 rounded">
+                    <div  className="w-full mb-4 mt-4 border-2 border-orange-300 rounded">
                       {
                       
                         (user && user.name && user.email && user.username && user.role && user.createdAt) && isScreenOnMobile === 'small' ?
@@ -206,6 +223,18 @@ const UserAccess = () => {
                           user.role === 'registered' ?
                             <div className='text-center mb-4'>
                               <div className='flex justify-center items-center'>
+                                <span
+                                  className='cursor-pointer mr-8 flex items-center hover:bg-rose-200 p-2 rounded'
+                                  onClick={()=>removeFromSpecialList(user.id)}
+                                >
+                                  <span className='mr-4 text-sm font-bold lowercase'>Remove From Special List</span>
+                                  <ArrowUndo
+                                    color={'#1aa7ec'} 
+                                    title="edit-user"
+                                    height='28px'
+                                    width='28px'
+                                  />
+                                </span>
                                 <span
                                   className='cursor-pointer mr-8 flex items-center hover:bg-green-200 p-2 rounded'
                                   onClick={()=>permitAdminAccess(user.id)}
