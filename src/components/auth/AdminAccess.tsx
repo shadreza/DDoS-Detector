@@ -93,13 +93,11 @@ const AdminAccess = () => {
               clearModalWithinSec(3)
               setDocumentToggler(!documentToggler)
             } else {
-              alert('else')
               dispatch(setMessageForModal(["Failed", "Admin deleteion could not be done... Please try again later"]))
               dispatch(setShowModal(true))
               clearModalWithinSec(3)
             }
           }).catch(() => {
-            alert('catch')
             dispatch(setMessageForModal(["Failed", "Admin deleteion could not be done... Please try again later"]))
             dispatch(setShowModal(true))
             clearModalWithinSec(3)

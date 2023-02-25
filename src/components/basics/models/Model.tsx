@@ -28,7 +28,6 @@ const Model = () => {
         setConnectionState(true)
       })
       .catch((err) => {
-        console.log(err)
         setConnectionState(false)
       })
   }
@@ -54,8 +53,6 @@ const Model = () => {
         dispatch(setStepCount(3))
       })
       .catch((e) => {
-        alert(e)
-        console.log(e)
         setHasDataBeenSent(false)
       })
   }
@@ -99,6 +96,9 @@ const Model = () => {
                     <div className="col-span-2 ... p-2 rounded-xl m-1  bg-indigo-300">
                       HistGradiantBoost
                     </div>
+                    <div className="col-span-3 p-2 rounded-xl m-1  bg-indigo-300">
+                      Ensemble Technique
+                    </div>
                   </div>
                     
                 </div>
@@ -109,25 +109,19 @@ const Model = () => {
                   
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                     <div className="... p-2 rounded-xl m-1 bg-indigo-300">
-                      Machine Learning Models
+                      LSTM
                     </div>
                     <div className="... p-2 rounded-xl m-1  bg-indigo-300">
-                      Machine Learning Models
+                      GRU
                     </div>
                     <div className="... p-2 rounded-xl m-1  bg-indigo-300">
-                      Machine Learning Models
+                      Bi-LSTM
+                    </div>
+                    <div className="... p-2 rounded-xl m-1  bg-indigo-300">
+                      Heuristic Calculations
                     </div>
                     <div className="col-span-2 ... p-2 rounded-xl m-1  bg-indigo-300">
-                      Machine Learning Models
-                    </div>
-                    <div className="... p-2 rounded-xl m-1  bg-indigo-300">
-                      Machine Learning Models
-                    </div>
-                    <div className="... p-2 rounded-xl m-1  bg-indigo-300">
-                      Machine Learning Models
-                    </div>
-                    <div className="col-span-2 ... p-2 rounded-xl m-1  bg-indigo-300">
-                      Machine Learning Models
+                      Bi-GRU
                     </div>
                   </div>
                     

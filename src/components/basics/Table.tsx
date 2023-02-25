@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { ArrowForward, CaretBackCircleOutline, PlayBackCircleOutline, PlayCircleOutline, PlayForwardCircleOutline } from "react-ionicons"
 import { useDispatch, useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom"
 import LoadingPage from "../../pages/errorPages/LoadingPage"
 import { setMaxStepCount, setStepCount } from "../../redux/features/instructionInfo"
 import { clearMessageForModal, setMessageForModal, setShowModal } from "../../redux/features/modalMessage"
@@ -10,6 +11,7 @@ const Table = () => {
   const { dataJson, headers, resultJson } = useSelector((state: RootState) => state.dataStore)
   const { stepCount, maxStepCount } = useSelector((state: RootState) => state.instructionInfoStore)
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [tmpDataJson, setTempDataJson] = useState<any[]>(dataJson)
   const [dataHeaders, setDataHeaders] = useState<string[]>(headers)
@@ -70,7 +72,7 @@ const Table = () => {
       dispatch(setMaxStepCount(2))
       dispatch(setStepCount(2))
     } else {
-
+      navigate("/stats", { replace: true })
     }
   }
 
