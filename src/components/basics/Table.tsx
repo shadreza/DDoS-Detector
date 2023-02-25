@@ -7,10 +7,30 @@ import { clearMessageForModal, setMessageForModal, setShowModal } from "../../re
 import { RootState } from "../../redux/store"
 
 const Table = () => {
-  const { dataJson, headers } = useSelector((state: RootState) => state.dataStore)
+  const { dataJson, headers, resultJson } = useSelector((state: RootState) => state.dataStore)
+  const { stepCount, maxStepCount } = useSelector((state: RootState) => state.instructionInfoStore)
   const dispatch = useDispatch();
 
   const [tmpDataJson, setTempDataJson] = useState<any[]>(dataJson)
+  const [dataHeaders, setDataHeaders] = useState<string[]>(headers)
+  const readyTheData = () => {
+    if (maxStepCount >= 2 && resultJson.length > 0) { 
+      const newDataJson = []
+      
+      for (let i = 0; i < tmpDataJson.length; i++) { 
+        let tmpObj = { ...tmpDataJson[i]}
+        tmpObj.Result = resultJson[i]
+        newDataJson.push(tmpObj)
+      }
+      setTempDataJson(newDataJson)
+      let newHeaderArray = []
+      for (let i = 0; i < headers.length; i++) { 
+        newHeaderArray.push(headers[i])
+      }
+      newHeaderArray.push('Result')
+      setDataHeaders(newHeaderArray)
+    }
+  }
   const [isTableReady, setIsTableReady] = useState(false)
   const [tableJson, setTableJson] = useState<any[]>([])
   const [page, setPage] = useState(0);
@@ -39,14 +59,23 @@ const Table = () => {
   }
 
   useEffect(() => {
+    readyTheData()
+  }, [])
+  
+  useEffect(() => {
+    readyTheData()
     getTableJsonFormatted()
   }, [dataJson, rowsPerPage])
 
 
 
   const proceedToModelComponent = () => {
-    dispatch(setMaxStepCount(2))
-    dispatch(setStepCount(2))
+    if (stepCount !== 3) {
+      dispatch(setMaxStepCount(2))
+      dispatch(setStepCount(2))
+    } else {
+
+    }
   }
 
   
@@ -120,7 +149,7 @@ const Table = () => {
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                   <tr className="sticky top-0 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     {
-                      headers.map((headerName,i) => 
+                      dataHeaders.map((headerName,i) => 
                         <th key={i} scope="col" className="px-6 py-3">
                             {headerName}
                         </th>
@@ -130,22 +159,40 @@ const Table = () => {
                 </thead>
                 <tbody>
                   {
-                    tableJson[page].map((data:any,i:any) => 
-                      <tr key={i} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        {
-                          headers.map((headerName, i) => 
-                            i === 0 ?
-                              <th key={i} scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                {data[headerName]}
-                              </th>
-                              :
-                              <td key={i} scope="col" className="px-6 py-3">
+                    stepCount === 3 ?
+                      tableJson[page].map((data:any,i:any) => 
+                        <tr key={i} className={`border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 ${data['Result']==='BENIGN' ? 'bg-green-100' : 'bg-rose-100'} `}>
+                          {
+                            dataHeaders.map((headerName, i) => 
+                              i === 0 ?
+                                <th key={i} scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                   {data[headerName]}
-                              </td>
-                          )
-                        }
-                      </tr>
-                    )
+                                </th>
+                                :
+                                <td key={i} scope="col" className="px-6 py-3">
+                                    {data[headerName]}
+                                </td>
+                            )
+                          }
+                        </tr>
+                      )
+                      :
+                      tableJson[page].map((data:any,i:any) => 
+                        <tr key={i} className={`bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600`}>
+                          {
+                            dataHeaders.map((headerName, i) => 
+                              i === 0 ?
+                                <th key={i} scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                  {data[headerName]}
+                                </th>
+                                :
+                                <td key={i} scope="col" className="px-6 py-3">
+                                    {data[headerName]}
+                                </td>
+                            )
+                          }
+                        </tr>
+                      )
                   }
                 </tbody>
               </table>
@@ -184,9 +231,16 @@ const Table = () => {
 
 
             <div className=" mt-2 sm:mt-4 text-center p-2 w-fit hover:bg-blue-200 bg-rose-200 rounded-xl flex justify-center items-center m-auto cursor-pointer" onClick={proceedToModelComponent} >
-              <span className="p-1 font-bold">
-                Proceed
-              </span>
+              {
+                stepCount === 3 ?
+                  <span className="p-1 font-bold">
+                    Get Stats
+                  </span>
+                  :
+                  <span className="p-1 font-bold">
+                    Proceed
+                  </span>
+              }
               <ArrowForward shake/>
             </div>
           </div>

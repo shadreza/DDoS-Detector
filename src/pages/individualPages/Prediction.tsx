@@ -1,5 +1,6 @@
 import { Close, HelpCircle } from "react-ionicons"
 import { useDispatch, useSelector } from "react-redux"
+import Model from "../../components/basics/models/Model"
 import Steps from "../../components/basics/Steps"
 import Table from "../../components/basics/Table"
 import UploadCsv from "../../components/basics/UploadCsv"
@@ -8,15 +9,12 @@ import { RootState } from "../../redux/store"
 import LoadingPage from "../errorPages/LoadingPage"
 
 const Prediction = () => {
-  const { isDataReadyForTable, hasDataProcessingStarted } = useSelector((state: RootState) => state.dataStore)
-  const { instruction, showInstruction, stepCount, maxStepCount  } = useSelector((state: RootState) => state.instructionInfoStore)
+  const { isDataReadyForTable, hasDataProcessingStarted, resultJson } = useSelector((state: RootState) => state.dataStore)
+  const { instruction, showInstruction, stepCount  } = useSelector((state: RootState) => state.instructionInfoStore)
   const dispatch = useDispatch()
   const toggleInstructionModalSettings = () => {
     dispatch(setShowInstruction(!showInstruction))
   }
-
-  // dispatch(setMaxStepCount(0))
-  // dispatch(setStepCount(0))
 
   return (
     <div>
@@ -64,26 +62,14 @@ const Prediction = () => {
                   <span>No Data To Show</span>
               :
               stepCount <= 2 ?
-                <></>
+                <Model/>
                 :
-                stepCount <= 3 ?
-                  <></>
+                stepCount <= 3 && resultJson.length > 0?
+                  <Table/>
                   :
                   <></>
 
         }
-        {/* {
-          stepCount >= 0 && <UploadCsv />
-        }
-        {
-          stepCount >= 1 && <Table />
-        }
-        {
-          stepCount >= 2 && <UploadCsv />
-        }
-        {
-          stepCount >= 3 && <Table />
-        } */}
       </div>
       
     </div>

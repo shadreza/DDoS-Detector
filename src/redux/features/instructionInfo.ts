@@ -8,9 +8,9 @@ const instructions = [
 ]
 
 const stepInfos = [
-  "Upload Csv File",
+  "Upload Log File [CSV]",
   "Visualize",
-  "Predict With Model",
+  "Choose Model",
   "Result"
 ]
 

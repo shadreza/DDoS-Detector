@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearDataJson, clearHeaders, setDataJson, setFileInfo, setHasDataProcessingStarted, setHeaders, setIsDataReadyForTable } from '../../redux/features/dataJson';
 import { setMaxStepCount, setStepCount } from '../../redux/features/instructionInfo';
@@ -44,6 +44,11 @@ const UploadCsv = () => {
       setCsvFile(e.target.files[0])
     }
   }
+
+  useEffect(() => {
+    dispatch(setStepCount(0))
+  }, [])
+  
 
   const clearCsvFile = () => {
     dispatch(setFileInfo({name: "", size: ""}))

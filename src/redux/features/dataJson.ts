@@ -5,7 +5,8 @@ export interface TempState {
   headers: string[],
   isDataReadyForTable: boolean,
   hasDataProcessingStarted: boolean,
-  fileInfo: any
+  fileInfo: any,
+  resultJson: any[]
 }
 
 let initialState: TempState = {
@@ -13,7 +14,8 @@ let initialState: TempState = {
   headers: [],
   isDataReadyForTable: false,
   hasDataProcessingStarted: false,
-  fileInfo: {name: "", size: 0}
+  fileInfo: { name: "", size: 0 },
+  resultJson: []
 }
 
 export const counterSlice = createSlice({
@@ -23,8 +25,14 @@ export const counterSlice = createSlice({
     setDataJson: (state, action: PayloadAction<any[]>) => {
       state.dataJson = action.payload
     },
+    setResultJson: (state, action: PayloadAction<any[]>) => {
+      state.resultJson = action.payload
+    },
     clearDataJson: (state) => {
       state.dataJson = []
+    },
+    clearResultJson: (state) => {
+      state.resultJson = []
     },
     setHeaders: (state, action: PayloadAction<string[]>) => {
       state.headers = action.payload
@@ -45,6 +53,6 @@ export const counterSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const {setDataJson, clearDataJson, setHeaders, clearHeaders, setIsDataReadyForTable, setHasDataProcessingStarted, setFileInfo} = counterSlice.actions
+export const {setDataJson, setResultJson, clearDataJson, clearResultJson, setHeaders, clearHeaders, setIsDataReadyForTable, setHasDataProcessingStarted, setFileInfo} = counterSlice.actions
 
 export default counterSlice.reducer
