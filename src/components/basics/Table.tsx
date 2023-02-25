@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react"
 import { ArrowForward, CaretBackCircleOutline, PlayBackCircleOutline, PlayCircleOutline, PlayForwardCircleOutline } from "react-ionicons"
 import { useDispatch, useSelector } from "react-redux"
+import LoadingPage from "../../pages/errorPages/LoadingPage"
 import { setMaxStepCount, setStepCount } from "../../redux/features/instructionInfo"
 import { clearMessageForModal, setMessageForModal, setShowModal } from "../../redux/features/modalMessage"
 import { RootState } from "../../redux/store"
-import LoadingAnimation from "../animations/LoadingAnimation"
 
 const Table = () => {
   const { dataJson, headers } = useSelector((state: RootState) => state.dataStore)
@@ -191,7 +191,7 @@ const Table = () => {
             </div>
           </div>
           :
-          <LoadingAnimation/>
+          <LoadingPage/>
       }
     </>
   )
