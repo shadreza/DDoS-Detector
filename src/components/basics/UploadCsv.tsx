@@ -7,6 +7,7 @@ import { RootState } from '../../redux/store';
 const UploadCsv = () => {
   const dispatch = useDispatch();
   const {fileInfo} = useSelector((state: RootState) => state.dataStore)
+  const {maxStepCount} = useSelector((state: RootState) => state.instructionInfoStore)
 
   const [csvFile, setCsvFile] = useState<File>(new File([], ''))
 
@@ -157,7 +158,7 @@ const UploadCsv = () => {
           
             <div className='mt-2 m-auto max-w-lg p-4 rounded-xl bg-[#FFE7CC] flex justify-around items-center'>
               {
-                fileInfo && fileInfo.name && fileInfo.size ?
+                maxStepCount !=0 ?
                   <></>
                   :
                   <button
