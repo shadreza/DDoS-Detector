@@ -114,19 +114,20 @@ const Stats = () => {
           }
         </div>
       </div>
-      <div className="w-[50%] h-[40vh] m-auto mt-10">
+        <div className="m-auto mt-10">
         <PieChart data={pieChartData} 
-        segmentsShift={(index) => (index === 0 ? shiftSize : 0.5)}
-        label={({ dataEntry }) => dataEntry.value}
-        labelStyle={(index) => ({
-          fill: pieChartData[index].color,
-          fontSize: '5px',
-          fontFamily: 'sans-serif',
-        })}
-        radius={42}
-        labelPosition={112}
-        />
-      </div>
+          style={{ height: '400px' }}
+          segmentsShift={(index) => (index === 0 ? shiftSize : 0.5)}
+          label={({ dataEntry }) => dataEntry.value}
+          labelStyle={(index) => ({
+            fill: pieChartData[index].color,
+            fontSize: '6px',
+            fontFamily: 'sans-serif',
+          })}
+          radius={36}
+          labelPosition={110}
+          />
+        </div>
     </div>
   )
 }
