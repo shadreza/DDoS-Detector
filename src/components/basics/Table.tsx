@@ -159,7 +159,7 @@ const Table = () => {
                   {
                     stepCount === 3 ?
                       tableJson[page].map((data:any,i:any) => 
-                        <tr key={i} className={`border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 ${data['Result']==='BENIGN' ? 'bg-green-100' : 'bg-rose-100'} `}>
+                        <tr key={i} className={`border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 ${data['Result']==='BENIGN' ? 'bg-green-100 dark:bg-green-100' : 'bg-rose-100 dark:bg-rose-100'} `}>
                           {
                             dataHeaders.map((headerName, i) => 
                               i === 0 ?

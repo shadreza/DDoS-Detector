@@ -15,7 +15,9 @@ const Stats = () => {
   
   const navigate = useNavigate();
 
+  let height:string = '350px'
   const setLabelCount = () => {
+
 
     let nameArray:string[] = ['']
 
@@ -43,10 +45,6 @@ const Stats = () => {
         break
       } 
     }
-
-    const getPieChart = () => {
-      
-  }
 
     for (let i = 0; i < nameArray.length; i++) {
 
@@ -80,6 +78,7 @@ const Stats = () => {
 
   useEffect(() => {
     setLabelCount()
+    height = "400px"
   }, [])
 
   useEffect(() => {
@@ -90,11 +89,6 @@ const Stats = () => {
     
   }, [resultJson, maxStepCount])
 
-  const defaultLabelStyle = {
-  fontSize: '5px',
-  fontFamily: 'sans-serif',
-  };
-  const shiftSize = 7;
   
 
   return (
@@ -117,7 +111,7 @@ const Stats = () => {
         <div className="m-auto mt-10">
         <PieChart data={pieChartData} 
           style={{ height: '400px' }}
-          segmentsShift={(index) => (index === 0 ? shiftSize : 0.5)}
+          segmentsShift={(index) => (index === 0 ? 4 : 0.5)}
           label={({ dataEntry }) => dataEntry.value}
           labelStyle={(index) => ({
             fill: pieChartData[index].color,
