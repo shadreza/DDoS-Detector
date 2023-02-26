@@ -89,7 +89,7 @@ const Stats = () => {
     
   }, [resultJson, maxStepCount])
 
-  
+
 
   return (
     <div className="p-2 rounded-xl text-center">
@@ -110,7 +110,7 @@ const Stats = () => {
       </div>
         <div className="m-auto mt-10">
         <PieChart data={pieChartData} 
-          style={{ height: '400px' }}
+          style={{ height: '500px' }}
           segmentsShift={(index) => (index === 0 ? 4 : 0.5)}
           label={({ dataEntry }) => dataEntry.value}
           labelStyle={(index) => ({

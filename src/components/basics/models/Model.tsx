@@ -8,8 +8,8 @@ import LoadingAnimation from "../../animations/LoadingAnimation";
 
 const Model = () => {
 
-  const baseURL = "https://ddos-be.onrender.com"
-  // const baseURL = "http://127.0.0.1:8000"
+  // const baseURL = "https://ddos-be.onrender.com"
+  const baseURL = "http://127.0.0.1:8000"
   const additionOfPostURL = ["data"]
 
   const [post, setPost] = useState(null)
@@ -118,7 +118,7 @@ const Model = () => {
                       Bi-LSTM
                     </div>
                     <div className="... p-2 rounded-xl m-1  bg-indigo-300">
-                      Heuristic Calculations
+                      Ensemble Technique
                     </div>
                     <div className="col-span-2 ... p-2 rounded-xl m-1  bg-indigo-300">
                       Bi-GRU
