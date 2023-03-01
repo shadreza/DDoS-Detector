@@ -6,20 +6,17 @@ const Home = () => {
   const navigate = useNavigate()
 
   return (
-    <div className="text-red-400 text-center">
-      <p className="text-[60px] animate-pulse uppercase tracking-[20px] mt-10">DDoS ___ Detector</p>
-      <div className="mt-20 m-auto md:flex md:justify-evenly w-[60%] items-center">
+    <div className="text-red-400 text-center w-full">
+      <p className="text-[30px] lg:text-[60px] animate-pulse uppercase tracking-[20px] mt-10">DDoS Detector</p>
+      <div className="mt-20 m-auto flex justify-evenly items-center">
         <span className="animate-spin">
-
-        <LogoReact width="80px" height="80px" color="cyan"  />
+          <LogoReact width="40px" height="40px" color="cyan"  />
         </span>
         <span className="animate-ping">
-
-        <LogoFlickr width="80px" height="80px" color="maroon"  />
+          <LogoFlickr width="40px" height="40px" color="maroon"  />
         </span>
         <span className="animate-pulse">
-
-        <LogoFirebase  width="80px" height="80px" color="orange" />
+          <LogoFirebase  width="40px" height="40px" color="orange" />
         </span>
         
       </div>

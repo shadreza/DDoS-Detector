@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import { PieChart } from 'react-minimal-pie-chart';
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, Tooltip, XAxis, YAxis } from 'recharts';
+
 import { RootState } from "../../redux/store";
+
 
 const Stats = () => {
 
@@ -15,7 +17,10 @@ const Stats = () => {
   
   const navigate = useNavigate();
 
-  let height:string = '350px'
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+
+  const RADIAN = Math.PI / 180;
+
   const setLabelCount = () => {
 
 
@@ -78,7 +83,6 @@ const Stats = () => {
 
   useEffect(() => {
     setLabelCount()
-    height = "400px"
   }, [])
 
   useEffect(() => {
@@ -89,10 +93,22 @@ const Stats = () => {
     
   }, [resultJson, maxStepCount])
 
+  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index } : any) => {
+  const radius = innerRadius + (outerRadius - innerRadius) * 1.5;
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+  return (
+    <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
+      {resultName[index] + " - " + ((resultCount[index]/resultJson.length)*100).toString() + "%" }
+    </text>
+  );
+};
+
 
 
   return (
-    <div className="p-2 rounded-xl text-center">
+    <div className="p-2 rounded-xl text-center bg-black max-h-[90vh] overflow-y-auto">
       <p className="text-xl font-bold tracking-widest animate-pulse uppercase text-red-500">Statistics of Log File</p>
       <div className="mt-4 bg-orange-200 p-2 rounded-xl">
 
@@ -108,20 +124,56 @@ const Stats = () => {
           }
         </div>
       </div>
-        <div className="m-auto mt-10">
-        <PieChart data={pieChartData} 
-          style={{ height: '500px' }}
-          segmentsShift={(index) => (index === 0 ? 4 : 0.5)}
-          label={({ dataEntry }) => dataEntry.value}
-          labelStyle={(index) => ({
-            fill: pieChartData[index].color,
-            fontSize: '6px',
-            fontFamily: 'sans-serif',
-          })}
-          radius={36}
-          labelPosition={110}
-          />
-        </div>
+
+        <p className="text-center text-rose-200 mt-20 mb-2">Attacks in counts</p>
+      <div className="overflow-auto">
+
+
+        <BarChart
+          width={1200}
+          height={300}
+          data={pieChartData}
+          margin={{
+            top: 5,
+            right: 60,
+            left: 60,
+            bottom: 5,
+          }}
+          barSize={20}
+        >
+          <XAxis dataKey="title" scale="point" padding={{ left: 20, right: 20 }} />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <CartesianGrid strokeDasharray="3 3" />
+          <Bar dataKey="value" fill="#8884d8" background={{ fill: '#eee' }} />
+        </BarChart>
+
+      </div>
+        
+        <p className="text-center text-rose-200 mt-20 mb-2">Attacks in percentage</p>
+      <div className="overflow-auto">
+
+
+          <PieChart width={800} height={800}>
+          <Pie
+            data={pieChartData}
+            cx="50%"
+            cy="50%"
+            labelLine={true}
+            label={renderCustomizedLabel}
+            outerRadius={150}
+            fill="#8884d8"
+            dataKey="value"
+          >
+            {pieChartData.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            ))}
+          </Pie>
+          </PieChart>
+
+      </div>
+
     </div>
   )
 }

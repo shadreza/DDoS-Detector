@@ -1,6 +1,6 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearDataJson, clearHeaders, setDataJson, setFileInfo, setHasDataProcessingStarted, setHeaders, setIsDataReadyForTable } from '../../redux/features/dataJson';
+import { clearDataJson, clearHeaders, dummyData, dummyHeaders, setDataJson, setFileInfo, setHasDataProcessingStarted, setHeaders, setIsDataReadyForTable } from '../../redux/features/dataJson';
 import { setMaxStepCount, setStepCount } from '../../redux/features/instructionInfo';
 import { RootState } from '../../redux/store';
 
@@ -111,6 +111,7 @@ const UploadCsv = () => {
     }
 
     dispatch(setHeaders(headers))
+    console.log(headers)
 
     const rows = str.slice(str.indexOf('\n')+1).split('\n')
 
@@ -143,6 +144,16 @@ const UploadCsv = () => {
     dispatch(setMaxStepCount(1))
     dispatch(setStepCount(1))
   }
+
+  const processDummyCSV = () => {
+    dispatch(setHeaders(dummyHeaders))
+    dispatch(setDataJson(dummyData))
+    dispatch(setIsDataReadyForTable(true))
+    dispatch(setHasDataProcessingStarted(false))
+    dispatch(setMaxStepCount(1))
+    dispatch(setStepCount(1))
+  }
+
   return (
     <div className='text-center'>
 
@@ -163,7 +174,7 @@ const UploadCsv = () => {
           
             <div className='mt-2 m-auto max-w-lg p-4 rounded-xl bg-[#FFE7CC] flex justify-around items-center'>
               {
-                maxStepCount !=0 ?
+                maxStepCount !==0 ?
                   <></>
                   :
                   <button
@@ -188,15 +199,20 @@ const UploadCsv = () => {
             </div>
           </>
           :
-          <div className='mt-2 m-auto max-w-lg p-4 rounded-xl bg-[#FFE7CC]'>
-            <span className='cursor-pointer'>
-              <input
-                type="file"
-                accept= ".csv"
-                id='csvFileInput'
-                onChange={handleCsvFileChange}
-              />
-            </span>
+          <div>
+            <div className='mt-2 m-auto max-w-lg p-4 rounded-xl bg-[#FFE7CC]'>
+              <span className='cursor-pointer'>
+                <input
+                  type="file"
+                  accept= ".csv"
+                  id='csvFileInput'
+                  onChange={handleCsvFileChange}
+                />
+              </span>
+            </div>
+            <div>
+              <button onClick={processDummyCSV} className='mt-2 m-auto max-w-lg p-4 rounded-xl bg-indigo-100 animate-pulse'>Try An Example Log File</button>
+          </div>
           </div>
       }
 

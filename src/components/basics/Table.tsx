@@ -63,7 +63,7 @@ const Table = () => {
   useEffect(() => {
     readyTheData()
     getTableJsonFormatted()
-  }, [dataJson, tmpDataJson, rowsPerPage])
+  }, [dataJson, rowsPerPage])
 
 
 

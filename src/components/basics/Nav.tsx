@@ -27,7 +27,7 @@ const Nav = () => {
 
   let Links =[
     { name:"HOME", link:"/"},
-    // { name: "ABOUT", link: "/about" },
+    { name: "ABOUT", link: "/about" },
   ];
 
   if (loggedInUserJson == null) {
