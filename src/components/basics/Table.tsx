@@ -15,7 +15,10 @@ const Table = () => {
 
   const [tmpDataJson, setTempDataJson] = useState<any[]>(dataJson)
   const [dataHeaders, setDataHeaders] = useState<string[]>(headers)
+
   const readyTheData = () => {
+
+
     if (maxStepCount >= 2 && resultJson.length > 0) { 
       const newDataJson = []
       
@@ -36,7 +39,7 @@ const Table = () => {
   const [isTableReady, setIsTableReady] = useState(false)
   const [tableJson, setTableJson] = useState<any[]>([])
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [totalPages, setTotaPages] = useState(0)
   
   const getTableJsonFormatted = () => {
