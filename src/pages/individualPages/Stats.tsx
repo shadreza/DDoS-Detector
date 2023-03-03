@@ -92,10 +92,10 @@ const Stats = () => {
       <p className="text-xl font-bold tracking-widest animate-pulse uppercase text-red-500">Statistics of Log File</p>
       <div className="mt-4 bg-orange-200 p-2 rounded-xl">
 
-        <div className="m-auto">
+        <div className="m-auto mb-10">
           {
             resultName.map((res, i) =>
-              <div key={i} className="flex max-w-[50%] p-2 bg-indigo-300 rounded-xl justify-center items-center m-auto mt-2 mb-2">
+              <div key={i} className="flex sm:max-w-[60%] p-2 bg-indigo-300 rounded-xl justify-center items-center m-auto mt-2 mb-2">
                 <span className="ml-1 mr-1">{res}</span>
                 <span className="ml-1 mr-1"> : </span>
                 <span className="ml-1 mr-1">{resultCount[i]} packets</span> <span> [ ~ { 100 * resultCount[i] / resultJson.length } % ]</span>
@@ -103,6 +103,9 @@ const Stats = () => {
             )
           }
         </div>
+
+        <p onClick={() => {navigate("/", { replace: true })}} className="mb-5 cursor-pointer p-2 bg-rose-100 pl-4 pr-4 rounded-xl animate-pulse uppercase font-bold w-fit m-auto">Go To Home Page</p>
+
       </div>
 
         
