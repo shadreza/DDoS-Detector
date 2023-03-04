@@ -1,23 +1,25 @@
 import axios from "axios";
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
+import { storeHistoricalData } from "../../../functions/historicalAnalysis/storeHistoricalData";
 import { setResultJson } from "../../../redux/features/dataJson";
 import { setMaxStepCount, setStepCount } from "../../../redux/features/instructionInfo";
+import { clearMessageForModal, setMessageForModal, setShowModal } from "../../../redux/features/modalMessage";
 import { RootState } from "../../../redux/store";
 import LoadingAnimation from "../../animations/LoadingAnimation";
 
 const Model = () => {
 
   const baseURL = "https://ddos-be.onrender.com"
-  // const baseURL = "http://127.0.0.1:8000"
-  const additionOfPostURL = ["data"]
+
+  const { loggedInUserJson } = useSelector((state: RootState) => state.loggedInUserStore)
 
   const [post, setPost] = useState(null)
   const [connectionState, setConnectionState] = useState(false)
   const [hasDataBeenSent, setHasDataBeenSent] = useState(false)
   const [responseFromBE, setResponseFromBE] = useState([])
-
   const { dataJson } = useSelector((state: RootState) => state.dataStore)
+  const { impFeatureSet, featureNameConsistency } = useSelector((state: RootState) => state.impFeatureStore)
   const dispatch = useDispatch()
   
   const getDataFromBE = async () => {
@@ -39,16 +41,60 @@ const Model = () => {
   }, []);
 
   const sendDataToBE = async (par: number) => {
-    const oneData = dataJson
-        setHasDataBeenSent(true)
+
+    let hasBeenModified = 0
+
+    let oneDataArray = []
+    for (let i = 0; i < dataJson.length; i++) {
+      let newObj: any = {}
+      for (let j = 0; j < impFeatureSet.length; j++) { 
+        if (dataJson[i][impFeatureSet[j]]) {
+            newObj[impFeatureSet[j]] = dataJson[i][impFeatureSet[j]].replace('\r','')
+            hasBeenModified = hasBeenModified + 1
+        } else if (dataJson[i][impFeatureSet[j]+'\r']) {
+          newObj[impFeatureSet[j]] = dataJson[i][impFeatureSet[j]+'\r'].replace('\r','')
+            hasBeenModified = hasBeenModified + 1
+        } else {
+          let newValue = '-0'
+          for (let k = 0; k < featureNameConsistency.length; k++) {
+            let newName = featureNameConsistency[k].replace('\r', '')
+            if (featureNameConsistency[k] === impFeatureSet[j] || featureNameConsistency[k] === impFeatureSet[j]+'\r' || featureNameConsistency[k + 1] === impFeatureSet[j] || featureNameConsistency[k + 1] === impFeatureSet[j]+'\r' || newName === impFeatureSet[j] || newName === impFeatureSet[j]+'\r') {
+              if (dataJson[i][featureNameConsistency[k + 1]]) {
+                newValue = dataJson[i][featureNameConsistency[k + 1]].replace('\r','')
+                hasBeenModified = hasBeenModified + 1
+                break
+              }
+            }
+            k++
+          }
+          newObj[impFeatureSet[j]] = newValue
+        }
+      }
+      oneDataArray.push(newObj)
+    }
+
+    if (hasBeenModified !== (dataJson.length * impFeatureSet.length)) {
+      dispatch(clearMessageForModal)
+      dispatch(setMessageForModal(['Warning','Your dataset was not totally formatted and some features were missing. So default value inserted']))
+      dispatch(setShowModal(true))
+      setTimeout(() => {
+        dispatch(setShowModal(false))
+      }, 3000)
+      hasBeenModified = hasBeenModified + 0
+    }
+    setHasDataBeenSent(true)
     await axios
       .post((baseURL + "/data"), {
-        data: oneData,
+        data: oneDataArray,
         param: par
       })
       .then((response) => {
-        setResponseFromBE(response.data)
-        dispatch(setResultJson(response.data))
+        const responseData = response.data
+        setResponseFromBE(responseData)
+        dispatch(setResultJson(responseData))
+        if (loggedInUserJson.role !== 'interested') {
+          storeHistoricalData([dataJson,responseData])
+        }
         dispatch(setMaxStepCount(3))
         dispatch(setStepCount(3))
       })

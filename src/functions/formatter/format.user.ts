@@ -17,6 +17,7 @@ export const getFormattedUser = (user: any) => {
       password: user.password,
       createdAt: getDateTime(user.createdAt),
       updatedAt: getDateTime(user.updatedAt),
+      role: user.role
     }
   } else return null
 }

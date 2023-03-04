@@ -92,6 +92,8 @@ const Stats = () => {
       <p className="text-xl font-bold tracking-widest animate-pulse uppercase text-red-500">Statistics of Log File</p>
       <div className="mt-4 bg-orange-200 p-2 rounded-xl">
 
+        <p>Total Packets : { resultJson.length }</p>
+
         <div className="m-auto mb-10">
           {
             resultName.map((res, i) =>

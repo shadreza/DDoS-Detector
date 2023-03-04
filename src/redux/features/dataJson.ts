@@ -79,7 +79,7 @@ export const dummyData = [
         "Idle Mean": "0.0",
         "Idle Std": "0.0",
         "Idle Max": "0.0",
-        "Idle Min\r": "0.0\r"
+        "Idle Min\r": "11110.0\r"
     },
     {
         "Index No": "863",

@@ -6,12 +6,29 @@ import { RootState } from '../../redux/store';
 
 const UploadCsv = () => {
   const dispatch = useDispatch();
-  const {fileInfo} = useSelector((state: RootState) => state.dataStore)
-  const {maxStepCount} = useSelector((state: RootState) => state.instructionInfoStore)
+  const {fileInfo, dataJson} = useSelector((state: RootState) => state.dataStore)
+  const { maxStepCount } = useSelector((state: RootState) => state.instructionInfoStore)
+  const { featureNameConsistency } = useSelector((state: RootState) => state.impFeatureStore)
+  const [fet, setFet] = useState([""])
 
   const [csvFile, setCsvFile] = useState<File>(new File([], ''))
 
+  useEffect(() => {
+    let importantFeaturesNames = []
+
+    for (let i = 0; i < featureNameConsistency.length; i++) {
+      if (featureNameConsistency[i] === featureNameConsistency[i + 1]) {
+        i++
+      }
+      importantFeaturesNames.push(featureNameConsistency[i])
+    }
+
+    setFet(importantFeaturesNames)
+  }, [])
+
   const calculatedFileSize = (sizeInBytes: number) => {
+
+
     let unit = "B"
     let i = 0
     for (i = 0; i <= 6; i++) {
@@ -67,6 +84,7 @@ const UploadCsv = () => {
     dispatch(setMaxStepCount(0))
     dispatch(setStepCount(0))
 
+
     const file : File = csvFile
     const reader = new FileReader()
 
@@ -111,7 +129,6 @@ const UploadCsv = () => {
     }
 
     dispatch(setHeaders(headers))
-    console.log(headers)
 
     const rows = str.slice(str.indexOf('\n')+1).split('\n')
 
@@ -156,6 +173,10 @@ const UploadCsv = () => {
 
   return (
     <div className='text-center'>
+
+      <div className='m-auto max-w-lg p-2 rounded-xl bg-indigo-200'>
+        Please Follow the CIC-DoS Dataset format. Your Dataset must have the features given at the end...
+      </div>
 
       {
         fileInfo && fileInfo.name && fileInfo.size ?
@@ -210,11 +231,37 @@ const UploadCsv = () => {
                 />
               </span>
             </div>
-            <div>
-              <button onClick={processDummyCSV} className='mt-2 m-auto max-w-lg p-4 rounded-xl bg-indigo-100 animate-pulse'>Try An Example Log File</button>
+            <div className='max-w-lg m-auto'>
+              {
+                dataJson.length ? 
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault()
+                      clearCsvFile()  
+                    }}
+                    className='mt-2 ml-2 m-auto p-4 rounded-xl bg-rose-100'>Clear Current Log Data Before Uploading</button>
+                  :
+                  <></>
+              }
+              <button
+                onClick={(e) => {
+                  e.preventDefault()
+                  processDummyCSV()  
+                }}
+                className='mt-2 mr-2 m-auto max-w-lg p-4 rounded-xl bg-indigo-100 animate-pulse'>Try An Example Log File</button>
           </div>
           </div>
       }
+
+      <div className='mt-2 m-auto max-w-lg p-4 rounded-xl bg-indigo-200 max-h-[20vh] overflow-auto'>
+        {
+          fet.map((feature, i) => 
+            
+            <span className='p-1 bg-rose-100 m-1 rounded inline-block' >{ feature } </span>
+            
+          )
+        }
+      </div>
 
     </div>
   )
