@@ -66,7 +66,6 @@ const Prediction = () => {
                 :
                 stepCount <= 3 && resultJson.length > 0 ?
                   <div className="text-center">
-                    <p className="animate-pulse text-orange-300 mb-2">If Result is not showing just toggle the rows per page</p>
                     <Table/>
                   </div>
                   :

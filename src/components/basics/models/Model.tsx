@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { storeHistoricalData } from "../../../functions/historicalAnalysis/storeHistoricalData";
+import LoadingPage from "../../../pages/errorPages/LoadingPage";
 import { setResultJson } from "../../../redux/features/dataJson";
 import { setMaxStepCount, setStepCount } from "../../../redux/features/instructionInfo";
 import { clearMessageForModal, setMessageForModal, setShowModal } from "../../../redux/features/modalMessage";
@@ -75,12 +75,9 @@ const Model = () => {
 
     if (hasBeenModified !== (dataJson.length * impFeatureSet.length)) {
       dispatch(clearMessageForModal)
-      dispatch(setMessageForModal(['Warning','Your dataset was not totally formatted and some features were missing. So default value inserted']))
+      dispatch(setMessageForModal(['Warning','Your dataset was not totally formatted and some features were missing. So default value inserted. ' + Math.abs(impFeatureSet.length - (hasBeenModified/dataJson.length)) + ' out of ' + impFeatureSet.length +' features are not named properly. So results may come inaccurate. Please follow the CIC-DoS Column Name Convention' ]))
       dispatch(setShowModal(true))
-      setTimeout(() => {
-        dispatch(setShowModal(false))
-      }, 3000)
-      hasBeenModified = hasBeenModified + 0
+      hasBeenModified = 0
     }
     setHasDataBeenSent(true)
     await axios
@@ -92,9 +89,6 @@ const Model = () => {
         const responseData = response.data
         setResponseFromBE(responseData)
         dispatch(setResultJson(responseData))
-        if (loggedInUserJson.role !== 'interested') {
-          storeHistoricalData([dataJson,responseData])
-        }
         dispatch(setMaxStepCount(3))
         dispatch(setStepCount(3))
       })
@@ -114,7 +108,7 @@ const Model = () => {
           <div className="bg-cyan-100 dark:bg-emerald-200 rounded-xl max-w-fit p-4 flex-reverse sm:flex sm:justify-around sm:items-center mt-4 m-auto text-center">
 
             {
-              connectionState &&
+              connectionState ?
               <>
 
                 <div onClick={() => { sendDataToBE(0) }} className="cursor-pointer hover:bg-[#FD8A8A] p-4 m-auto mt-2 mb-2 text-center max-w-fit bg-[#F5EAEA] sm:mr-4 rounded-xl">
@@ -174,7 +168,13 @@ const Model = () => {
                   </div>
                     
 
-              </>
+                </>
+                
+                :
+
+                <div className="rounded-full p-1 text-center m-auto flex justify-center items-center">
+                  <LoadingAnimation/>
+                </div>
 
               
             }

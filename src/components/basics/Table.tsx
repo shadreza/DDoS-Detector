@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { ArrowForward, CaretBackCircleOutline, PlayBackCircleOutline, PlayCircleOutline, PlayForwardCircleOutline } from "react-ionicons"
+import { ArrowForward, CaretBackCircleOutline, PlayBackCircleOutline, PlayCircleOutline, PlayForwardCircleOutline, RefreshCircleOutline } from "react-ionicons"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import LoadingPage from "../../pages/errorPages/LoadingPage"
@@ -29,6 +29,7 @@ const Table = () => {
       }
       setTempDataJson(newDataJson)
       let newHeaderArray = []
+      newHeaderArray.push('Result')
       for (let i = 0; i < headers.length; i++) { 
         newHeaderArray.push(headers[i])
       }
@@ -79,8 +80,6 @@ const Table = () => {
     }
   }
 
-  
-
   const changePage = (pageValue: number) => {
     if (pageValue) {
       if (pageValue < 0) {
@@ -114,8 +113,8 @@ const Table = () => {
     }
   }
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = +event.target.value
+  const handleChangeRowsPerPage = (num: number) => {
+    const newValue = num
     if (newValue) {
       if (newValue >= 1 && newValue <= 1000) {
         if (newValue > tmpDataJson.length) {
@@ -141,7 +140,18 @@ const Table = () => {
   };
 
   return (
-    <>
+    <div>
+      <p className="animate-pulse text-orange-500 mb-2 cursor-pointer flex items-center w-fit m-auto hover:animate-none"
+        onClick={() => {
+          handleChangeRowsPerPage(4)
+          handleChangeRowsPerPage(5)
+        }}
+      >
+        If Result is not showing click 
+        <span className="ml-2">
+          <RefreshCircleOutline color='red'/>
+        </span>
+      </p>
       {
         isTableReady ?
           <div className="h-auto">
@@ -161,8 +171,9 @@ const Table = () => {
                 <tbody>
                   {
                     stepCount === 3 ?
-                      tableJson[page].map((data:any,i:any) => 
-                        <tr key={i} className={`border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 ${data['Result']==='BENIGN' ? 'bg-green-100 dark:bg-green-100' : 'bg-rose-100 dark:bg-rose-100'} `}>
+                      tableJson[page].map((data: any, i: any) => 
+                        
+                        <tr key={i} className={`border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 ${data['Result']==='BENIGN' ? 'bg-green-100 dark:bg-green-100' : data['Result'] && 'bg-rose-100 dark:bg-rose-100'} `}>
                           {
                             dataHeaders.map((headerName, i) => 
                               i === 0 ?
@@ -175,7 +186,8 @@ const Table = () => {
                                 </td>
                             )
                           }
-                        </tr>
+                          </tr>
+                        
                       )
                       :
                       tableJson[page].map((data:any,i:any) => 
@@ -225,7 +237,7 @@ const Table = () => {
               <div className="max-w-fit m-auto mt-2 sm:mt-0">
                 <span className="ml-2  cursor-pointer flex items-center bg-slate-200 p-2 rounded-xl">
                   <span className="mr-1 ml-1">Rows Per Page</span>
-                  <input className="w-14 mr-1 ml-1 rounded text-center" type="number" value={rowsPerPage} onChange={e => {handleChangeRowsPerPage(e)}} />
+                  <input className="w-14 mr-1 ml-1 rounded text-center" type="number" value={rowsPerPage} onChange={e => {handleChangeRowsPerPage(+e.target.value)}} />
                 </span>
               </div>
             </div>
@@ -248,7 +260,7 @@ const Table = () => {
           :
           <LoadingPage/>
       }
-    </>
+    </div>
   )
 }
 

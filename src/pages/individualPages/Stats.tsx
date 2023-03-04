@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { storeHistoricalData } from "../../functions/historicalAnalysis/storeHistoricalData";
 import { RootState } from "../../redux/store";
 
 
 const Stats = () => {
 
-  const { resultJson } = useSelector((state: RootState) => state.dataStore)
+  const { resultJson, dataJson } = useSelector((state: RootState) => state.dataStore)
   const { maxStepCount } = useSelector((state: RootState) => state.instructionInfoStore)
+  const { loggedInUserJson } = useSelector((state: RootState) => state.loggedInUserStore)
 
   const [resultName, setResultName] = useState ([''])
   const [resultCount, setResultCount] = useState ([0])
@@ -15,6 +17,10 @@ const Stats = () => {
   const navigate = useNavigate();
 
   const setLabelCount = () => {
+
+    if (loggedInUserJson.role !== 'interested') {
+      storeHistoricalData([dataJson, resultJson])
+    }
     
     let nameArray:string[] = ['']
 
@@ -73,7 +79,7 @@ const Stats = () => {
   }
 
     useEffect(() => {
-    setLabelCount()
+      setLabelCount()
   }, [])
 
   useEffect(() => {

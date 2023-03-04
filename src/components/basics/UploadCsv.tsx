@@ -257,7 +257,7 @@ const UploadCsv = () => {
         {
           fet.map((feature, i) => 
             
-            <span className='p-1 bg-rose-100 m-1 rounded inline-block' >{ feature } </span>
+            <span key={i} className='p-1 bg-rose-100 m-1 rounded inline-block' >{ feature } </span>
             
           )
         }
