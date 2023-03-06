@@ -29,7 +29,7 @@ const Stats = (prop: Props) => {
   
   const attackChartDefault = [
     "Attack Name",
-    "Attack Ratio %",
+    "Count",
     { role: "style" },
     {
       sourceColumn: 0,
@@ -45,7 +45,7 @@ const Stats = (prop: Props) => {
     backgroundColor: "transparent",
     is3d: true,
     hAxis: {
-      title: "Attack Ratio %",
+      title: "Attack Count",
       minValue: 0,
     },
     vAxis: {
@@ -737,23 +737,23 @@ const Stats = (prop: Props) => {
         prop.propValue === 'Historical' && Object.keys(dataHistoricalJson['attacks']).length &&
         <div className="max-h-[40vh] sm:max-h-[60vh] p-2 overflow-y-auto overflow-x-auto"> 
           {
-            Object.values(attacksStatsData).length > 1 ?
+              Object.values(attacksStatsData).length > 1 ?
                 <Charts 
                   passedData={attacksStatsData} 
                   passedOptions={attackOptions} 
-                  chartName="PieChart" 
-                  title="All Attack Ratio"
+                  chartName="BarChart" 
+                  title="All Attack Counts"
                 />
               :
               <></>
           }
           {
-              Object.values(attacksStatsDataCount).length > 1 ?
+            Object.values(attacksStatsDataCount).length > 1 ?
                 <Charts 
                   passedData={attacksStatsDataCount} 
                   passedOptions={attackCountOptions} 
-                  chartName="BarChart" 
-                  title="All Attack Counts"
+                  chartName="PieChart" 
+                  title="All Attack Ratio"
                 />
               :
               <></>
