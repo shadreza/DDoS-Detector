@@ -3,14 +3,13 @@ import { db } from '../../firebase.config';
 export const updateDocumnet = async (collectionName:string, passedId:string, updatedJson:any) => {
   const collectionDoc = doc(db, collectionName, passedId)
   try {
-    await updateDoc(collectionDoc, updatedJson).then(async res => {
-      return await true
-    }).catch(async err => { 
-      console.log(err.message)
-      return await false
+    return updateDoc(collectionDoc, updatedJson).then(() => {
+      return true
+    }).catch(() => { 
+      return false
     })
-  } catch (err) {
-    console.log(err)
-    return await false
+  } catch {
+    return false
   }
+  
 }  

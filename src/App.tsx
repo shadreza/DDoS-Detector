@@ -21,9 +21,9 @@ import UnAuthorized from "./pages/errorPages/UnAuthorized";
 import About from "./pages/individualPages/About";
 import Admin from "./pages/individualPages/Admin";
 import Home from "./pages/individualPages/Home";
+import OverAllStats from "./pages/individualPages/OverAllStats";
 import Prediction from "./pages/individualPages/Prediction";
 import Profile from "./pages/individualPages/Profile";
-import Stats from "./pages/individualPages/Stats";
 import { setloggedInUserJson } from "./redux/features/loggedInUser";
 import { RootState } from "./redux/store";
 import ProtectedAdminRoutes from "./routes/ProtectedAdminRoutes";
@@ -79,7 +79,7 @@ function App() {
                     <Route path="/admin/access/users" element={<UserAccess />}></Route>
                   </Route>
                   <Route path="/predict" element={<Prediction/>}></Route>
-                  <Route path="/stats" element={<Stats/>}></Route>
+                  <Route path="/stats" element={<OverAllStats/>}></Route>
                   <Route path="/logout" element={<Logout/>}></Route>
                   <Route path="/profile" element={<Profile />}></Route>
                   <Route path="/unauthorized" element={<UnAuthorized />}></Route>

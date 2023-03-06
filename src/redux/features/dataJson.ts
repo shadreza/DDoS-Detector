@@ -8084,22 +8084,59 @@ export const dummyHeaders = [
     "Idle Min\r"
 ]
 
+const defaultHistoricalData = {
+    destination_ip: {},
+    source_ip: {},
+    attacks: {},
+    protocols: {},
+    timestamps: {
+        '0': 0,
+        '1': 0,    
+        '2': 0,    
+        '3': 0,    
+        '4': 0,    
+        '5': 0,    
+        '6': 0,    
+        '7': 0,    
+        '8': 0,    
+        '9': 0,    
+        '10': 0,    
+        '11': 0,    
+        '12': 0,    
+        '13': 0,    
+        '14': 0,    
+        '15': 0,    
+        '16': 0,    
+        '17': 0,    
+        '18': 0,    
+        '19': 0,    
+        '20': 0,    
+        '21': 0,    
+        '22': 0,    
+        '23': 0,    
+    },
+}
+
 export interface TempState {
-  dataJson: any[],
-  headers: string[],
-  isDataReadyForTable: boolean,
-  hasDataProcessingStarted: boolean,
-  fileInfo: any,
-  resultJson: any[]
+    dataJson: any[],
+    headers: string[],
+    isDataReadyForTable: boolean,
+    hasDataProcessingStarted: boolean,
+    fileInfo: any,
+    resultJson: any[],
+    dataHistoricalJson: any,
+    hasStatsRegistered: boolean,
 }
 
 let initialState: TempState = {
-  dataJson: [],
-  headers: [],
-  isDataReadyForTable: false,
-  hasDataProcessingStarted: false,
-  fileInfo: { name: "", size: 0 },
-  resultJson: []
+    dataJson: [],
+    headers: [],
+    isDataReadyForTable: false,
+    hasDataProcessingStarted: false,
+    fileInfo: { name: "", size: 0 },
+    resultJson: [],
+    dataHistoricalJson: defaultHistoricalData,
+    hasStatsRegistered: false
 }
 
 export const counterSlice = createSlice({
@@ -8127,16 +8164,25 @@ export const counterSlice = createSlice({
     setIsDataReadyForTable: (state, action: PayloadAction<boolean>) => { 
       state.isDataReadyForTable = action.payload
     },
+    setHasStatsBeenRegistered: (state, action: PayloadAction<boolean>) => { 
+      state.hasStatsRegistered = action.payload
+    },
     setHasDataProcessingStarted: (state, action: PayloadAction<boolean>) => { 
       state.hasDataProcessingStarted = action.payload
     },
     setFileInfo: (state, action: PayloadAction<any>) => { 
       state.fileInfo = action.payload
     },
+    setHistoricalDataJson: (state, action: PayloadAction<any>) => {
+      state.dataHistoricalJson = action.payload
+    },
+    clearHistoricalDataJson: (state) => {
+      state.dataHistoricalJson = defaultHistoricalData
+    },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const {setDataJson, setResultJson, clearDataJson, clearResultJson, setHeaders, clearHeaders, setIsDataReadyForTable, setHasDataProcessingStarted, setFileInfo} = counterSlice.actions
+export const {setDataJson, setResultJson, clearDataJson, clearResultJson, setHeaders, clearHeaders, setIsDataReadyForTable, setHasDataProcessingStarted, setFileInfo, setHistoricalDataJson, clearHistoricalDataJson, setHasStatsBeenRegistered} = counterSlice.actions
 
 export default counterSlice.reducer

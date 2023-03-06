@@ -17,9 +17,7 @@ const Table = () => {
   const [dataHeaders, setDataHeaders] = useState<string[]>(headers)
 
   const readyTheData = () => {
-
-
-    if (maxStepCount >= 2 && resultJson.length > 0) { 
+    if (stepCount === 3 && resultJson.length > 0) { 
       const newDataJson = []
       
       for (let i = 0; i < tmpDataJson.length; i++) { 
@@ -29,9 +27,11 @@ const Table = () => {
       }
       setTempDataJson(newDataJson)
       let newHeaderArray = []
-      newHeaderArray.push('Result')
       for (let i = 0; i < headers.length; i++) { 
         newHeaderArray.push(headers[i])
+        if (i == 0) {
+          newHeaderArray.push('Result')
+        }
       }
       newHeaderArray.push('Result')
       setDataHeaders(newHeaderArray)
@@ -141,21 +141,24 @@ const Table = () => {
 
   return (
     <div>
-      <p className="animate-pulse text-orange-500 mb-2 cursor-pointer flex items-center w-fit m-auto hover:animate-none"
-        onClick={() => {
-          handleChangeRowsPerPage(4)
-          handleChangeRowsPerPage(5)
-        }}
-      >
-        If Result is not showing click 
-        <span className="ml-2">
-          <RefreshCircleOutline color='red'/>
-        </span>
-      </p>
+      {
+        stepCount === 3 &&
+        <p className="animate-pulse text-orange-500 mb-2 cursor-pointer flex items-center w-fit m-auto hover:animate-none"
+          onClick={() => {
+            handleChangeRowsPerPage(4)
+            handleChangeRowsPerPage(5)
+          }}
+        >
+          If Result is not showing click 
+          <span className="ml-2">
+            <RefreshCircleOutline color='red'/>
+          </span>
+        </p>
+      }
       {
         isTableReady ?
           <div className="h-auto">
-            <div className="relative overflow-x-auto shadow-md sm:rounded-lg max-h-[45vh] sm:max-h-[60vh] overflow-y-auto align-center ">
+            <div className="relative overflow-x-auto shadow-md sm:rounded-lg max-h-[40vh] sm:max-h-[50vh] overflow-y-auto align-center ">
               <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                   <tr className="sticky top-0 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -177,7 +180,7 @@ const Table = () => {
                           {
                             dataHeaders.map((headerName, i) => 
                               i === 0 ?
-                                <th key={i} scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <th key={i} scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                   {data[headerName]}
                                 </th>
                                 :
@@ -195,7 +198,7 @@ const Table = () => {
                           {
                             dataHeaders.map((headerName, i) => 
                               i === 0 ?
-                                <th key={i} scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <th key={i} scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                   {data[headerName]}
                                 </th>
                                 :

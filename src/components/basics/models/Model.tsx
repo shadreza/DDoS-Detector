@@ -1,8 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import LoadingPage from "../../../pages/errorPages/LoadingPage";
-import { setResultJson } from "../../../redux/features/dataJson";
+import { setHasStatsBeenRegistered, setResultJson } from "../../../redux/features/dataJson";
 import { setMaxStepCount, setStepCount } from "../../../redux/features/instructionInfo";
 import { clearMessageForModal, setMessageForModal, setShowModal } from "../../../redux/features/modalMessage";
 import { RootState } from "../../../redux/store";
@@ -87,12 +86,14 @@ const Model = () => {
       })
       .then((response) => {
         const responseData = response.data
+        dispatch(setHasStatsBeenRegistered(false))
         setResponseFromBE(responseData)
         dispatch(setResultJson(responseData))
         dispatch(setMaxStepCount(3))
         dispatch(setStepCount(3))
       })
       .catch((e) => {
+        dispatch(setHasStatsBeenRegistered(false))
         setHasDataBeenSent(false)
       })
   }
@@ -105,7 +106,7 @@ const Model = () => {
             <LoadingAnimation />
           </div>
           :
-          <div className="bg-cyan-100 dark:bg-emerald-200 rounded-xl max-w-fit p-4 flex-reverse sm:flex sm:justify-around sm:items-center mt-4 m-auto text-center">
+          <div className="bg-cyan-100 dark:bg-emerald-200 rounded-xl max-w-fit p-4 flex-reverse max-h-[60vh] overflow-y-auto sm:flex sm:justify-around sm:items-center mt-4 m-auto text-center">
 
             {
               connectionState ?
@@ -114,7 +115,7 @@ const Model = () => {
                 <div onClick={() => { sendDataToBE(0) }} className="cursor-pointer hover:bg-[#FD8A8A] p-4 m-auto mt-2 mb-2 text-center max-w-fit bg-[#F5EAEA] sm:mr-4 rounded-xl">
 
                   <button onClick={() => { sendDataToBE(0) }} className="p-2 rounded-xl bg-red-100 border-orange-400 border-4 animate-pulse hover:shadow-lg mb-2"> <span className="hover-font-bold">Machine Learning Model</span> </button>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  <div className="grid grid-cols-3 sm:grid-cols-0 gap-2">
                     <div className="... p-2 rounded-xl m-1 bg-indigo-300">
                       Decision Tree
                     </div>
@@ -143,11 +144,11 @@ const Model = () => {
                     
                 </div>
               
-                <div onClick={() => { sendDataToBE(1) }} className="cursor-pointer hover:bg-[#FD8A8A] p-4 m-auto mt-2 mb-2 text-center max-w-fit bg-[#F5EAEA] sm:ml-4 rounded-xl">
+                <div onClick={() => { sendDataToBE(0) }} className="cursor-pointer hover:bg-[#FD8A8A] p-4 m-auto mt-2 mb-2 text-center max-w-fit bg-[#F5EAEA] sm:ml-4 rounded-xl">
 
-                  <button onClick={() => { sendDataToBE(1) }} className="p-2 rounded-xl bg-red-100 border-sky-400 border-4 animate-pulse hover:shadow-lg mb-2"> <span className="hover-font-bold">Deep Learning Model</span> </button>
+                  <button onClick={() => { sendDataToBE(0) }} className="p-2 rounded-xl bg-red-100 border-sky-400 border-4 animate-pulse hover:shadow-lg mb-2"> <span className="hover-font-bold">Deep Learning Model</span> </button>
                   
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  <div className="grid grid-cols-3 sm:grid-cols-0 gap-2">
                     <div className="... p-2 rounded-xl m-1 bg-indigo-300">
                       LSTM
                     </div>
@@ -158,11 +159,11 @@ const Model = () => {
                       Bi-LSTM
                     </div>
                     <div className="... p-2 rounded-xl m-1  bg-indigo-300">
-                      Ensemble Technique
-                    </div>
-                    <div className="col-span-2 ... p-2 rounded-xl m-1  bg-indigo-300">
                       Bi-GRU
-                    </div>
+                      </div>
+                      <div className="col-span-2 ... p-2 rounded-xl m-1  bg-indigo-300">
+                        Ensemble Technique
+                      </div>
                   </div>
                     
                   </div>
