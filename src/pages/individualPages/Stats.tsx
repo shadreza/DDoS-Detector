@@ -696,31 +696,37 @@ const Stats = (prop: Props) => {
             }
             <p className="font-bold mb-6">Total Packets : <span className="text-red-600">{resultJson.length}</span></p>
 
-            <div className="m-auto w-full sm:w-[70%] bg-rose-50 mt-4 mb-4 p-2 rounded-xl">
-              <p className="uppercase font-bold animate-pulse text-orange-500">Attack Analysis</p>
-              {
-                resultName.map((res, i) =>
-                  <div key={i} className="sm:flex p-1 justify-center items-center m-auto mt-2">
-                    <span className="block sm:inline mt-1 mb-1  sm:w-40 sm:mr-auto p-2 bg-rose-300 rounded-xl">{res}</span>
-                    <span className="block sm:inline mt-1 mb-1  sm:w-40 sm:ml-1 sm:mr-1 p-2 bg-indigo-300 rounded-xl">{resultCount[i]} packets</span>
-                    <span className="block sm:inline mt-1 mb-1  sm:w-40 sm:ml-auto p-2 bg-indigo-300 rounded-xl"> [ ~ {100 * resultCount[i] / resultJson.length} % ]</span>
-                  </div>
-                )
-              }
-            </div>
+            {
+              resultName.length > 0 &&
+              <div className="m-auto w-full sm:w-[70%] bg-rose-50 mt-4 mb-4 p-2 rounded-xl">
+                <p className="uppercase font-bold animate-pulse text-orange-500">Attack Analysis</p>
+                {
+                  resultName.map((res, i) =>
+                    <div key={i} className="sm:flex p-1 justify-center items-center m-auto mt-2">
+                      <span className="block sm:inline mt-1 mb-1  sm:w-40 sm:mr-auto p-2 bg-rose-300 rounded-xl">{res}</span>
+                      <span className="block sm:inline mt-1 mb-1  sm:w-40 sm:ml-1 sm:mr-1 p-2 bg-indigo-300 rounded-xl">{resultCount[i]} packets</span>
+                      <span className="block sm:inline mt-1 mb-1  sm:w-40 sm:ml-auto p-2 bg-indigo-300 rounded-xl"> [ ~ {100 * resultCount[i] / resultJson.length} % ]</span>
+                    </div>
+                  )
+                }
+              </div>
+            }
 
-            <div className="m-auto w-full sm:w-[70%] bg-indigo-50 mt-4 mb-4 p-2 rounded-xl">
-              <p className="uppercase font-bold animate-pulse text-orange-500">Hourly Attack Analysis</p>
-              {
-                timeName.map((res, i) =>
-                  <div key={i} className="sm:flex p-1 justify-center items-center m-auto mt-2">
-                    <span className="block sm:inline mt-1 mb-1  sm:w-40 sm:mr-auto p-2 bg-rose-300 rounded-xl">{res}</span>
-                    <span className="block sm:inline mt-1 mb-1  sm:w-40 sm:ml-1 sm:mr-1 p-2 bg-indigo-300 rounded-xl">{timeCount[i]} packets</span>
-                    <span className="block sm:inline mt-1 mb-1  sm:w-40 sm:ml-auto p-2 bg-indigo-300 rounded-xl"> [ ~ {100 * timeCount[i] / dataJson.length} % ]</span>
-                  </div>
-                )
-              }
-            </div>
+            {
+              timeName.length > 0 &&
+              <div className="m-auto w-full sm:w-[70%] bg-indigo-50 mt-4 mb-4 p-2 rounded-xl">
+                <p className="uppercase font-bold animate-pulse text-orange-500">Hourly Attack Analysis</p>
+                {
+                  timeName.map((res, i) =>
+                    <div key={i} className="sm:flex p-1 justify-center items-center m-auto mt-2">
+                      <span className="block sm:inline mt-1 mb-1  sm:w-40 sm:mr-auto p-2 bg-rose-300 rounded-xl">{res}</span>
+                      <span className="block sm:inline mt-1 mb-1  sm:w-40 sm:ml-1 sm:mr-1 p-2 bg-indigo-300 rounded-xl">{timeCount[i]} packets</span>
+                      <span className="block sm:inline mt-1 mb-1  sm:w-40 sm:ml-auto p-2 bg-indigo-300 rounded-xl"> [ ~ {100 * timeCount[i] / dataJson.length} % ]</span>
+                    </div>
+                  )
+                }
+              </div>
+            }
 
           </div>
           :
