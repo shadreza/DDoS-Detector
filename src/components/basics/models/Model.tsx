@@ -41,7 +41,7 @@ const Model = () => {
 
   const sendDataToBE = async (par: number) => {
 
-    let hasBeenModified = 0
+    let dataFoundFromFile = 0
 
     let oneDataArray = []
     for (let i = 0; i < dataJson.length; i++) {
@@ -49,10 +49,10 @@ const Model = () => {
       for (let j = 0; j < impFeatureSet.length; j++) { 
         if (dataJson[i][impFeatureSet[j]]) {
             newObj[impFeatureSet[j]] = dataJson[i][impFeatureSet[j]].replace('\r','')
-            hasBeenModified = hasBeenModified + 1
+            dataFoundFromFile = dataFoundFromFile + 1
         } else if (dataJson[i][impFeatureSet[j]+'\r']) {
           newObj[impFeatureSet[j]] = dataJson[i][impFeatureSet[j]+'\r'].replace('\r','')
-            hasBeenModified = hasBeenModified + 1
+            dataFoundFromFile = dataFoundFromFile + 1
         } else {
           let newValue = '-0'
           for (let k = 0; k < featureNameConsistency.length; k++) {
@@ -60,7 +60,7 @@ const Model = () => {
             if (featureNameConsistency[k] === impFeatureSet[j] || featureNameConsistency[k] === impFeatureSet[j]+'\r' || featureNameConsistency[k + 1] === impFeatureSet[j] || featureNameConsistency[k + 1] === impFeatureSet[j]+'\r' || newName === impFeatureSet[j] || newName === impFeatureSet[j]+'\r') {
               if (dataJson[i][featureNameConsistency[k + 1]]) {
                 newValue = dataJson[i][featureNameConsistency[k + 1]].replace('\r','')
-                hasBeenModified = hasBeenModified + 1
+                dataFoundFromFile = dataFoundFromFile + 1
                 break
               }
             }
@@ -72,11 +72,11 @@ const Model = () => {
       oneDataArray.push(newObj)
     }
 
-    if (hasBeenModified !== (dataJson.length * impFeatureSet.length)) {
+    if (dataFoundFromFile !== (dataJson.length * impFeatureSet.length)) {
       dispatch(clearMessageForModal)
-      dispatch(setMessageForModal(['Warning','Your dataset was not totally formatted and some features were missing. So default value inserted. ' + Math.abs(impFeatureSet.length - (hasBeenModified/dataJson.length)) + ' out of ' + impFeatureSet.length +' features are not named properly. So results may come inaccurate. Please follow the CIC-DoS Column Name Convention' ]))
+      dispatch(setMessageForModal(['Warning','Your dataset was not totally formatted and some features were missing. So default value inserted. ' + Math.abs(Math.round(impFeatureSet.length - (dataFoundFromFile/dataJson.length))) + ' out of ' + impFeatureSet.length +' features are not named properly. So results may come inaccurate. Please follow the CIC-DoS Column Name Convention' ]))
       dispatch(setShowModal(true))
-      hasBeenModified = 0
+      dataFoundFromFile = 0
     }
     setHasDataBeenSent(true)
     await axios

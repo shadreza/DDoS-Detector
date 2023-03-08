@@ -705,7 +705,7 @@ const Stats = (prop: Props) => {
                     <div key={i} className="sm:flex p-1 justify-center items-center m-auto mt-2">
                       <span className="block sm:inline mt-1 mb-1  sm:w-40 sm:mr-auto p-2 bg-rose-300 rounded-xl">{res}</span>
                       <span className="block sm:inline mt-1 mb-1  sm:w-40 sm:ml-1 sm:mr-1 p-2 bg-indigo-300 rounded-xl">{resultCount[i]} packets</span>
-                      <span className="block sm:inline mt-1 mb-1  sm:w-40 sm:ml-auto p-2 bg-indigo-300 rounded-xl"> [ ~ {100 * resultCount[i] / resultJson.length} % ]</span>
+                      <span className="block sm:inline mt-1 mb-1  sm:w-40 sm:ml-auto p-2 bg-indigo-300 rounded-xl"> [ ~ {(100 * resultCount[i] / resultJson.length).toFixed(4)} % ]</span>
                     </div>
                   )
                 }
@@ -721,7 +721,7 @@ const Stats = (prop: Props) => {
                     <div key={i} className="sm:flex p-1 justify-center items-center m-auto mt-2">
                       <span className="block sm:inline mt-1 mb-1  sm:w-40 sm:mr-auto p-2 bg-rose-300 rounded-xl">{res}</span>
                       <span className="block sm:inline mt-1 mb-1  sm:w-40 sm:ml-1 sm:mr-1 p-2 bg-indigo-300 rounded-xl">{timeCount[i]} packets</span>
-                      <span className="block sm:inline mt-1 mb-1  sm:w-40 sm:ml-auto p-2 bg-indigo-300 rounded-xl"> [ ~ {100 * timeCount[i] / dataJson.length} % ]</span>
+                      <span className="block sm:inline mt-1 mb-1  sm:w-40 sm:ml-auto p-2 bg-indigo-300 rounded-xl"> [ ~ {(100 * timeCount[i] / dataJson.length).toFixed(4)} % ]</span>
                     </div>
                   )
                 }

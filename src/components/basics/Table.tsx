@@ -180,7 +180,7 @@ const Table = () => {
                           {
                             dataHeaders.map((headerName, i) => 
                               i === 0 ?
-                                <th key={i} scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                <th key={i} scope="row" className="px-6 py-4 folt-bold text-gray-900 dark:text-slate-400 whitespace-nowrap">
                                   {data[headerName]}
                                 </th>
                                 :
@@ -198,7 +198,7 @@ const Table = () => {
                           {
                             dataHeaders.map((headerName, i) => 
                               i === 0 ?
-                                <th key={i} scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                <th key={i} scope="row" className="px-6 py-4 folt-bold text-gray-900 dark:text-orange-600 whitespace-nowrap">
                                   {data[headerName]}
                                 </th>
                                 :
