@@ -1,13 +1,15 @@
-# DDoS Detector
+# [DDoS Detector](https://drive.google.com/file/d/1OxAxRmz-oYISU8DmBQ4g0DuYtT1HCmr1/view)
 
 ---
 
 ---
 
-**live link**
+[**live link**](https://ddos-gage.vercel.app/) -->
 https://ddos-gage.vercel.app/
 
 ---
+
+[**video link**](https://drive.google.com/file/d/1OxAxRmz-oYISU8DmBQ4g0DuYtT1HCmr1/view) --> https://drive.google.com/file/d/1OxAxRmz-oYISU8DmBQ4g0DuYtT1HCmr1/view
 
 ---
 
