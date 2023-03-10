@@ -55,7 +55,7 @@ const About = () => {
               <p className="font-bold text-lg">ML Model Developer</p>
               <p className="text-base text-indigo-400">Md Abdullah Al Masum</p>
               <p className="text-sm">Student of B.Sc in CSE from MIST [Final Year]</p>
-              <a className="lowercase text-sky-400 cursor-pointer text-sm" href="https://masumbhai.me/">Profile</a>
+              <a className="lowercase text-sky-400 cursor-pointer text-sm" href="https://github.com/MasumBhai">Profile</a>
             </div>
           </div>
           <div className="flex items-center justify-between w-fit max-w-[24rem] md:w-[28rem] p-2 border-orange-300 border-2 m-auto mt-2 mb-2 rounded-xl">
